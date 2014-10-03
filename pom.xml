@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>shimoga</artifactId>
+    <groupId>com.microsoft.reef</groupId>
+    <name>Elastic Group Communications for REEF</name>
+    <version>0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <properties>
+        <reef.version>0.9-SNAPSHOT</reef.version>
+    </properties>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.microsoft.reef</groupId>
+            <artifactId>reef-common</artifactId>
+            <version>${reef.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.reef</groupId>
+            <artifactId>reef-io</artifactId>
+            <version>${reef.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.tang</groupId>
+            <artifactId>tang</artifactId>
+            <version>${reef.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.wake</groupId>
+            <artifactId>wake</artifactId>
+            <version>${reef.version}</version>
+        </dependency>
+    </dependencies>
+</project>
