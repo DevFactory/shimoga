@@ -12,8 +12,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <reef.version>0.9-SNAPSHOT</reef.version>
+        <hadoop.version>2.4.0</hadoop.version>
     </properties>
-
 
     <dependencies>
         <dependency>
@@ -27,6 +27,21 @@
             <version>${reef.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.microsoft.reef</groupId>
+            <artifactId>reef-runtime-local</artifactId>
+            <version>${reef.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.reef</groupId>
+            <artifactId>reef-runtime-yarn</artifactId>
+            <version>${reef.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.reef</groupId>
+            <artifactId>reef-poison</artifactId>
+            <version>${reef.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.microsoft.tang</groupId>
             <artifactId>tang</artifactId>
             <version>${reef.version}</version>
@@ -36,6 +51,20 @@
             <artifactId>wake</artifactId>
             <version>${reef.version}</version>
         </dependency>
+        <!-- HADOOP -->
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
+            <version>${hadoop.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-mapreduce-client-core</artifactId>
+            <version>${hadoop.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- End of HADOOP -->
     </dependencies>
 
     <build>

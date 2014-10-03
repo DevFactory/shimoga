@@ -4,4 +4,4 @@
 /**
  * Elastic Group Communications for REEF.
  */
-package com.microsoft.reef.shimoga;
+package com.microsoft.reef.io.network.nggroup;
