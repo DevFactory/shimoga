@@ -27,7 +27,7 @@ import com.microsoft.reef.io.network.group.operators.Broadcast;
 import com.microsoft.reef.io.network.group.operators.Reduce;
 import com.microsoft.reef.io.network.nggroup.api.task.CommunicationGroupClient;
 import com.microsoft.reef.io.network.nggroup.api.task.GroupCommClient;
-import com.microsoft.reef.io.network.util.Utils.Pair;
+import com.microsoft.reef.io.network.util.Pair;
 import com.microsoft.reef.task.Task;
 import com.microsoft.tang.annotations.Parameter;
 

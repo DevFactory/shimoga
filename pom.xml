@@ -51,6 +51,12 @@
             <artifactId>wake</artifactId>
             <version>${reef.version}</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>            
+        </dependency>
         <!-- HADOOP -->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -65,6 +71,11 @@
             <scope>provided</scope>
         </dependency>
         <!-- End of HADOOP -->
+        <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>2.5.0</version>
+            </dependency>
     </dependencies>
 
     <build>
@@ -87,6 +98,29 @@
                     <header>LICENSE.txt</header>
                     <strictCheck>true</strictCheck>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <tasks>
+                                <mkdir dir="target/generated-sources/proto" />
+                                <exec executable="protoc">
+                                    <arg value="--proto_path=src/main/proto/" />
+                                    <arg value="--java_out=target/generated-sources/proto" />
+                                    <arg value="src/main/proto/group_comm_protocol.proto" />
+                                </exec>
+                            </tasks>
+                            <sourceRoot>target/generated-sources/proto</sourceRoot>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

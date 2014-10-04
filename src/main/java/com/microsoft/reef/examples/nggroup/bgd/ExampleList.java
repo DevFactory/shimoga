@@ -16,7 +16,7 @@ import org.apache.hadoop.io.Text;
 import com.microsoft.reef.examples.nggroup.bgd.data.Example;
 import com.microsoft.reef.examples.nggroup.bgd.data.parser.Parser;
 import com.microsoft.reef.io.data.loading.api.DataSet;
-import com.microsoft.reef.io.network.util.Utils.Pair;
+import com.microsoft.reef.io.network.util.Pair;
 
 /**
  *
