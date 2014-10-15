@@ -255,8 +255,9 @@ public class CommunicationGroupDriverImpl implements CommunicationGroupDriver {
     LOG.finest(getQualifiedName() + "Task-" + id + " running. Waiting to acquire topologiesLock");
     LOG.fine(getQualifiedName() + "Got running Task: " + id);
 
-    if (perTaskState.containsKey(id)) {
-      synchronized (topologiesLock) {
+    boolean nonMember = false;
+    synchronized (topologiesLock) {
+      if (perTaskState.containsKey(id)) {
         LOG.finest(getQualifiedName() + "Acquired topologiesLock");
         for (final Class<? extends Name<String>> operName : operatorSpecs.keySet()) {
           final Topology topology = topologies.get(operName);
@@ -266,17 +267,22 @@ public class CommunicationGroupDriverImpl implements CommunicationGroupDriver {
         perTaskState.put(id, TaskState.RUNNING);
         LOG.finest(getQualifiedName() + "Released topologiesLock. Waiting to acquire yetToRunLock");
       }
-      synchronized (yetToRunLock) {
-        LOG.finest(getQualifiedName() + "Acquired yetToRunLock");
-        yetToRunLock.notifyAll();
-        LOG.finest(getQualifiedName() + "Released yetToRunLock");
+      else {
+        nonMember = true;
       }
     }
-    else {
+    synchronized (yetToRunLock) {
+      LOG.finest(getQualifiedName() + "Acquired yetToRunLock");
+      yetToRunLock.notifyAll();
+      LOG.finest(getQualifiedName() + "Released yetToRunLock");
+    }
+    if(nonMember) {
       LOG.exiting("CommunicationGroupDriverImpl", "runTask", getQualifiedName() + id + " does not belong to this communication group. Ignoring");
     }
-    LOG.fine(getQualifiedName() + "Status of task " + id + " changed to RUNNING");
-    LOG.exiting("CommunicationGroupDriverImpl", "runTask", Arrays.toString(new Object[] { getQualifiedName(), "Set running complete on task ", id }));
+    else {
+      LOG.fine(getQualifiedName() + "Status of task " + id + " changed to RUNNING");
+      LOG.exiting("CommunicationGroupDriverImpl", "runTask", Arrays.toString(new Object[] { getQualifiedName(), "Set running complete on task ", id }));
+    }
   }
 
   public void failTask (final String id) {
