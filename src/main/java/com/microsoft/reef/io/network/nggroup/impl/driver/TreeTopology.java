@@ -211,6 +211,7 @@ public class TreeTopology implements Topology {
     final TaskNode node = new TaskNodeImpl(senderStage, groupName, operName, rootId, driverId, true);
     this.root = node;
     this.logicalRoot = this.root;
+    this.prev = this.root;
 
     for (final Map.Entry<String, TaskNode> nodeEntry : nodes.entrySet()) {
       final TaskNode leaf = nodeEntry.getValue();
