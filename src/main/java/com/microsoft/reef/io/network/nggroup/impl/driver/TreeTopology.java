@@ -216,6 +216,7 @@ public class TreeTopology implements Topology {
     for (final Map.Entry<String, TaskNode> nodeEntry : nodes.entrySet()) {
       final TaskNode leaf = nodeEntry.getValue();
       addTaskNode(leaf);
+      this.prev = leaf;
     }
     nodes.put(rootId, root);
     LOG.exiting("TreeTopology", "setRootNode", getQualifiedName() + rootId);
