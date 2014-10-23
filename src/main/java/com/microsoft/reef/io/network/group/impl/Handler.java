@@ -4,8 +4,8 @@
 package com.microsoft.reef.io.network.group.impl;
 
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
-import com.microsoft.wake.EventHandler;
-import com.microsoft.wake.Identifier;
+import org.apache.reef.wake.EventHandler;
+import org.apache.reef.wake.Identifier;
 
 /**
  * Interface of a {@link EventHandler} for handling {@link GroupCommMessage}

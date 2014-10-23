@@ -3,16 +3,16 @@
  */
 package com.microsoft.reef.io.network.group.operators;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
 import com.microsoft.reef.io.network.group.impl.operators.basic.AllGatherOp;
-import com.microsoft.tang.annotations.DefaultImplementation;
-import com.microsoft.wake.Identifier;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.tang.annotations.DefaultImplementation;
+import org.apache.reef.wake.Identifier;
 
 import java.util.List;
 
 /**
  * MPI AllGather Operator.
- *
+ * <p/>
  * Each task applies this operator on an element of type T. The result will be
  * a list of elements constructed using the elements all-gathered at each
  * task.

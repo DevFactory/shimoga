@@ -3,12 +3,12 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.task;
 
+import com.microsoft.reef.io.network.group.operators.GroupCommOperator;
+import org.apache.reef.io.network.exception.ParentDeadException;
+import org.apache.reef.wake.EventHandler;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Logger;
-
-import com.microsoft.reef.io.network.exception.ParentDeadException;
-import com.microsoft.reef.io.network.group.operators.GroupCommOperator;
-import com.microsoft.wake.EventHandler;
 
 class InitHandler implements EventHandler<GroupCommOperator> {
 
@@ -17,12 +17,12 @@ class InitHandler implements EventHandler<GroupCommOperator> {
   private ParentDeadException exception = null;
   private final CountDownLatch initLatch;
 
-  public InitHandler (final CountDownLatch initLatch) {
+  public InitHandler(final CountDownLatch initLatch) {
     this.initLatch = initLatch;
   }
 
   @Override
-  public void onNext (final GroupCommOperator op) {
+  public void onNext(final GroupCommOperator op) {
     LOG.entering("InitHandler", "onNext", op);
     try {
       op.initialize();
@@ -33,7 +33,7 @@ class InitHandler implements EventHandler<GroupCommOperator> {
     LOG.exiting("InitHandler", "onNext", op);
   }
 
-  public ParentDeadException getException () {
+  public ParentDeadException getException() {
     return exception;
   }
 }

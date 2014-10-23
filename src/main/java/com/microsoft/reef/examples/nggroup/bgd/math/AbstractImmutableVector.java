@@ -4,7 +4,7 @@
 package com.microsoft.reef.examples.nggroup.bgd.math;
 
 
-import com.microsoft.reef.io.Tuple;
+import org.apache.reef.io.Tuple;
 
 import java.util.Formatter;
 import java.util.Locale;

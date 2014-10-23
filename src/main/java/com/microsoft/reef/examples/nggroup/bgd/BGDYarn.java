@@ -3,10 +3,10 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd;
 
-import com.microsoft.reef.client.LauncherStatus;
 import com.microsoft.reef.examples.nggroup.bgd.utils.Timer;
-import com.microsoft.reef.runtime.yarn.client.YarnClientConfiguration;
-import com.microsoft.tang.Configuration;
+import org.apache.reef.client.LauncherStatus;
+import org.apache.reef.runtime.yarn.client.YarnClientConfiguration;
+import org.apache.reef.tang.Configuration;
 
 /**
  * Runs BGD on the YARN runtime.

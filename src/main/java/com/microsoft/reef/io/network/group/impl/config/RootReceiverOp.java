@@ -5,8 +5,8 @@ package com.microsoft.reef.io.network.group.impl.config;
 
 import com.microsoft.reef.io.network.group.config.OP_TYPE;
 import com.microsoft.reef.io.network.group.operators.Reduce.ReduceFunction;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.remote.Codec;
 
 import java.util.List;
 
@@ -15,16 +15,22 @@ import java.util.List;
  * receiver - Reduce & Gather
  */
 public class RootReceiverOp extends AsymmetricOpDescription {
-  /** The id of the recevier */
+  /**
+   * The id of the recevier
+   */
   public final ComparableIdentifier receiver;
-  /** The ids of senders */
+  /**
+   * The ids of senders
+   */
   public final List<ComparableIdentifier> senders;
-  /** Reduce Function class to be used */
+  /**
+   * Reduce Function class to be used
+   */
   public final Class<? extends ReduceFunction<?>> redFuncClass;
 
   /**
    * Constructor for fields
-   * 
+   *
    * @param operatorType
    * @param dataCodecClass
    * @param receiver
@@ -32,18 +38,20 @@ public class RootReceiverOp extends AsymmetricOpDescription {
    * @param redFuncClass
    */
   public RootReceiverOp(OP_TYPE operatorType,
-      Class<? extends Codec<?>> dataCodecClass, ComparableIdentifier receiver,
-      List<ComparableIdentifier> senders,
-      Class<? extends ReduceFunction<?>> redFuncClass) {
+                        Class<? extends Codec<?>> dataCodecClass, ComparableIdentifier receiver,
+                        List<ComparableIdentifier> senders,
+                        Class<? extends ReduceFunction<?>> redFuncClass) {
     super(operatorType, dataCodecClass);
     this.receiver = receiver;
     this.senders = senders;
     this.redFuncClass = redFuncClass;
   }
 
-  /** Builder for fluent description of operators */
+  /**
+   * Builder for fluent description of operators
+   */
   public static class Builder implements
-      com.microsoft.reef.util.Builder<RootReceiverOp> {
+      org.apache.reef.util.Builder<RootReceiverOp> {
 
     private OP_TYPE operatorType;
     private Class<? extends Codec<?>> dataCodecClass;
@@ -53,7 +61,7 @@ public class RootReceiverOp extends AsymmetricOpDescription {
 
     /**
      * Override the operator type which is typically automatically set
-     * 
+     *
      * @param operatorType
      * @return
      */
@@ -64,7 +72,7 @@ public class RootReceiverOp extends AsymmetricOpDescription {
 
     /**
      * Set the Data Codec class typically inherited from GroupOperators
-     * 
+     *
      * @param dataCodecClass
      * @return
      */
@@ -75,7 +83,7 @@ public class RootReceiverOp extends AsymmetricOpDescription {
 
     /**
      * Set the list of ids of senders
-     * 
+     *
      * @param senders
      * @return
      */
@@ -86,7 +94,7 @@ public class RootReceiverOp extends AsymmetricOpDescription {
 
     /**
      * Set the receiver or root id
-     * 
+     *
      * @param receiver
      * @return
      */
@@ -97,7 +105,7 @@ public class RootReceiverOp extends AsymmetricOpDescription {
 
     /**
      * Set the reduce function class to be used
-     * 
+     *
      * @param redFuncClass
      * @return
      */

@@ -9,8 +9,8 @@ import com.microsoft.reef.io.network.group.operators.Broadcast;
 import com.microsoft.reef.io.network.group.operators.Gather;
 import com.microsoft.reef.io.network.group.operators.Reduce;
 import com.microsoft.reef.io.network.group.operators.Scatter;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.Identifier;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.Identifier;
 
 import java.util.List;
 

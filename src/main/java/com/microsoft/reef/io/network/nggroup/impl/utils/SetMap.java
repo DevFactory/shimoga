@@ -3,13 +3,9 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.utils;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.microsoft.reef.io.network.nggroup.impl.driver.MsgKey;
+
+import java.util.*;
 
 /**
  * Map from K to Set<V>
@@ -17,18 +13,18 @@ import com.microsoft.reef.io.network.nggroup.impl.driver.MsgKey;
 public class SetMap<K, V> {
   private final Map<K, Set<V>> map = new HashMap<>();
 
-  public boolean containsKey (final K key) {
+  public boolean containsKey(final K key) {
     return map.containsKey(key);
   }
 
-  public boolean contains (final K key, final V value) {
+  public boolean contains(final K key, final V value) {
     if (!containsKey(key)) {
       return false;
     }
     return map.get(key).contains(value);
   }
 
-  public Set<V> get (final K key) {
+  public Set<V> get(final K key) {
     if (map.containsKey(key)) {
       return map.get(key);
     } else {
@@ -36,7 +32,7 @@ public class SetMap<K, V> {
     }
   }
 
-  public void add (final K key, final V value) {
+  public void add(final K key, final V value) {
     final Set<V> values;
     if (!map.containsKey(key)) {
       values = new HashSet<>();
@@ -47,7 +43,7 @@ public class SetMap<K, V> {
     values.add(value);
   }
 
-  public boolean remove (final K key, final V value) {
+  public boolean remove(final K key, final V value) {
     if (!map.containsKey(key)) {
       return false;
     }
@@ -63,7 +59,7 @@ public class SetMap<K, V> {
    * @param key
    * @return
    */
-  public int count (final K key) {
+  public int count(final K key) {
     if (!containsKey(key)) {
       return 0;
     } else {
@@ -74,11 +70,11 @@ public class SetMap<K, V> {
   /**
    * @param key
    */
-  public Set<V> remove (final MsgKey key) {
+  public Set<V> remove(final MsgKey key) {
     return map.remove(key);
   }
 
-  public Set<K> keySet () {
+  public Set<K> keySet() {
     return map.keySet();
   }
 }

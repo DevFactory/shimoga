@@ -1,53 +1,27 @@
 /**
  * Copyright (C) 2014 Microsoft Corporation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package com.microsoft.reef.examples.nggroup.tron;
 
-import java.util.List;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
+import com.microsoft.reef.examples.nggroup.tron.data.DataMatrix;
 import com.microsoft.reef.examples.nggroup.tron.data.Example;
-import com.microsoft.reef.examples.nggroup.tron.data.parser.Parser;
 import com.microsoft.reef.examples.nggroup.tron.loss.LossFunction;
 import com.microsoft.reef.examples.nggroup.tron.math.DenseVector;
 import com.microsoft.reef.examples.nggroup.tron.math.Vector;
-import com.microsoft.reef.examples.nggroup.tron.operatornames.ConjugateDirectionBroadcaster;
-import com.microsoft.reef.examples.nggroup.tron.operatornames.ControlMessageBroadcaster;
-import com.microsoft.reef.examples.nggroup.tron.operatornames.DescentDirectionBroadcaster;
-import com.microsoft.reef.examples.nggroup.tron.operatornames.LineSearchEvaluationsReducer;
-import com.microsoft.reef.examples.nggroup.tron.operatornames.LossAndGradientReducer;
-import com.microsoft.reef.examples.nggroup.tron.operatornames.LossSecondDerivativeCompletionReducer;
-import com.microsoft.reef.examples.nggroup.tron.operatornames.MinEtaBroadcaster;
-import com.microsoft.reef.examples.nggroup.tron.operatornames.ModelAndDescentDirectionBroadcaster;
-import com.microsoft.reef.examples.nggroup.tron.operatornames.ModelBroadcaster;
-import com.microsoft.reef.examples.nggroup.tron.operatornames.ProjectedDirectionReducer;
+import com.microsoft.reef.examples.nggroup.tron.operatornames.*;
 import com.microsoft.reef.examples.nggroup.tron.parameters.AllCommunicationGroup;
 import com.microsoft.reef.examples.nggroup.tron.parameters.ProbabilityOfFailure;
 import com.microsoft.reef.examples.nggroup.tron.utils.StepSizes;
-import com.microsoft.reef.examples.nggroup.tron.data.DataMatrix;
 import com.microsoft.reef.io.network.group.operators.Broadcast;
 import com.microsoft.reef.io.network.group.operators.Reduce;
-import com.microsoft.reef.io.network.group.operators.Reduce.Receiver;
-import com.microsoft.reef.io.network.group.operators.Reduce.Sender;
 import com.microsoft.reef.io.network.nggroup.api.task.CommunicationGroupClient;
 import com.microsoft.reef.io.network.nggroup.api.task.GroupCommClient;
-import com.microsoft.reef.io.network.util.Pair;
-import com.microsoft.reef.task.Task;
-import com.microsoft.tang.annotations.Parameter;
+import org.apache.reef.io.network.util.Pair;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.task.Task;
+
+import javax.inject.Inject;
+import java.util.logging.Logger;
 
 public class SlaveTask implements Task {
 
@@ -118,7 +92,7 @@ public class SlaveTask implements Task {
         case ComputeGradientWithModel:
           failPerhaps();
           this.model = modelBroadcaster.receive();
-          if(dataTimesModel==null) {
+          if (dataTimesModel == null) {
             dataTimesModel = new DenseVector(dataMatrix.getNumberOfExamples());
             lossFirstDerivative = new DenseVector(dataMatrix.getNumberOfExamples());
             lossSecondDerivative = new DenseVector(dataMatrix.getNumberOfExamples());
@@ -157,10 +131,10 @@ public class SlaveTask implements Task {
   /**
    * @return
    */
-  private Pair<Integer, Vector> computeProjectionDirection (final Vector conjugateDirection) {
+  private Pair<Integer, Vector> computeProjectionDirection(final Vector conjugateDirection) {
     final Vector tempVec = new DenseVector(dataMatrix.getNumberOfExamples());
     dataMatrix.times(conjugateDirection, tempVec);
-    for(int i=0; i<dataMatrix.getNumberOfExamples();i++) {
+    for (int i = 0; i < dataMatrix.getNumberOfExamples(); i++) {
       tempVec.set(i, tempVec.get(i) * lossSecondDerivative.get(i));
     }
     final Vector result = new DenseVector(this.model.size());
@@ -171,9 +145,9 @@ public class SlaveTask implements Task {
   /**
    *
    */
-  private void computeLossSecondDerivative () {
-    int i=0;
-    for(final Example example : dataMatrix) {
+  private void computeLossSecondDerivative() {
+    int i = 0;
+    for (final Example example : dataMatrix) {
       final double lossSecDerPerExample = this.lossFunction.computeSecondGradient(example.getLabel(), dataTimesModel.get(i));
       lossSecondDerivative.set(i, lossSecDerPerExample);
       i++;
@@ -188,9 +162,9 @@ public class SlaveTask implements Task {
 
   private Pair<Pair<Double, Integer>, Vector> computeLossAndGradient() {
     dataMatrix.times(model, dataTimesModel);
-    int i=0;
+    int i = 0;
     double loss = 0;
-    for(final Example example : dataMatrix) {
+    for (final Example example : dataMatrix) {
       final double lossPerExample = this.lossFunction.computeLoss(example.getLabel(), dataTimesModel.get(i));
       final double lossDerPerExample = this.lossFunction.computeGradient(example.getLabel(), dataTimesModel.get(i));
       lossFirstDerivative.set(i, lossDerPerExample);

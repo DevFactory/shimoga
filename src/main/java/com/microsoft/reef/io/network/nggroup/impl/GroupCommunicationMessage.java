@@ -3,10 +3,10 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl;
 
-import java.util.Arrays;
-
 import com.microsoft.reef.io.network.nggroup.impl.utils.Utils;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
+
+import java.util.Arrays;
 
 /**
  *
@@ -25,12 +25,12 @@ public class GroupCommunicationMessage {
   private final String simpleOperName;
 
   public GroupCommunicationMessage(
-          final String groupName,
-          final String operName,
-          final Type msgType,
-          final String from, final int srcVersion,
-          final String to, final int dstVersion,
-          final byte[][] data) {
+      final String groupName,
+      final String operName,
+      final Type msgType,
+      final String from, final int srcVersion,
+      final String to, final int dstVersion,
+      final byte[][] data) {
     super();
     this.groupName = groupName;
     this.operName = operName;
@@ -52,7 +52,7 @@ public class GroupCommunicationMessage {
     return operName;
   }
 
-  public String getSimpleOperName () {
+  public String getSimpleOperName() {
     return simpleOperName;
   }
 
@@ -106,36 +106,36 @@ public class GroupCommunicationMessage {
   }
 
   @Override
-  public boolean equals (final Object obj) {
-    if(this != obj) {
-      if(obj instanceof GroupCommunicationMessage) {
+  public boolean equals(final Object obj) {
+    if (this != obj) {
+      if (obj instanceof GroupCommunicationMessage) {
         final GroupCommunicationMessage that = (GroupCommunicationMessage) obj;
-        if(!this.groupName.equals(that.groupName)) {
+        if (!this.groupName.equals(that.groupName)) {
           return false;
         }
-        if(!this.operName.equals(that.operName)) {
+        if (!this.operName.equals(that.operName)) {
           return false;
         }
-        if(!this.from.equals(that.from)) {
+        if (!this.from.equals(that.from)) {
           return false;
         }
-        if(this.srcVersion!=that.srcVersion) {
+        if (this.srcVersion != that.srcVersion) {
           return false;
         }
-        if(!this.to.equals(that.to)) {
+        if (!this.to.equals(that.to)) {
           return false;
         }
-        if(this.dstVersion!=that.dstVersion) {
+        if (this.dstVersion != that.dstVersion) {
           return false;
         }
-        if(!this.msgType.equals(that.msgType)) {
+        if (!this.msgType.equals(that.msgType)) {
           return false;
         }
-        if(this.data.length!=that.data.length) {
+        if (this.data.length != that.data.length) {
           return false;
         }
-        for(int i=0; i<data.length;i++) {
-          if(!Arrays.equals(this.data[i], that.data[i])) {
+        for (int i = 0; i < data.length; i++) {
+          if (!Arrays.equals(this.data[i], that.data[i])) {
             return false;
           }
         }

@@ -3,18 +3,7 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.operators;
 
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
-import com.microsoft.reef.driver.parameters.DriverIdentifier;
-import com.microsoft.reef.driver.task.TaskConfigurationOptions;
-import com.microsoft.reef.exception.evaluator.NetworkException;
-import com.microsoft.reef.io.network.exception.ParentDeadException;
 import com.microsoft.reef.io.network.group.operators.Broadcast;
-import com.microsoft.reef.io.network.impl.NetworkService;
 import com.microsoft.reef.io.network.nggroup.api.task.CommGroupNetworkHandler;
 import com.microsoft.reef.io.network.nggroup.api.task.CommunicationGroupServiceClient;
 import com.microsoft.reef.io.network.nggroup.api.task.OperatorTopology;
@@ -26,10 +15,20 @@ import com.microsoft.reef.io.network.nggroup.impl.config.parameters.TaskVersion;
 import com.microsoft.reef.io.network.nggroup.impl.task.OperatorTopologyImpl;
 import com.microsoft.reef.io.network.nggroup.impl.utils.Utils;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.reef.io.serialization.Codec;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.wake.EventHandler;
+import org.apache.reef.driver.parameters.DriverIdentifier;
+import org.apache.reef.driver.task.TaskConfigurationOptions;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.exception.ParentDeadException;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.serialization.Codec;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.wake.EventHandler;
+
+import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 public class BroadcastSender<T> implements Broadcast.Sender<T>, EventHandler<GroupCommunicationMessage> {
 
@@ -51,15 +50,15 @@ public class BroadcastSender<T> implements Broadcast.Sender<T>, EventHandler<Gro
   private final int version;
 
   @Inject
-  public BroadcastSender (@Parameter(CommunicationGroupName.class) final String groupName,
-                          @Parameter(OperatorName.class) final String operName,
-                          @Parameter(TaskConfigurationOptions.Identifier.class) final String selfId,
-                          @Parameter(DataCodec.class) final Codec<T> dataCodec,
-                          @Parameter(DriverIdentifier.class) final String driverId,
-                          @Parameter(TaskVersion.class) final int version,
-                          final CommGroupNetworkHandler commGroupNetworkHandler,
-                          final NetworkService<GroupCommunicationMessage> netService,
-                          final CommunicationGroupServiceClient commGroupClient) {
+  public BroadcastSender(@Parameter(CommunicationGroupName.class) final String groupName,
+                         @Parameter(OperatorName.class) final String operName,
+                         @Parameter(TaskConfigurationOptions.Identifier.class) final String selfId,
+                         @Parameter(DataCodec.class) final Codec<T> dataCodec,
+                         @Parameter(DriverIdentifier.class) final String driverId,
+                         @Parameter(TaskVersion.class) final int version,
+                         final CommGroupNetworkHandler commGroupNetworkHandler,
+                         final NetworkService<GroupCommunicationMessage> netService,
+                         final CommunicationGroupServiceClient commGroupClient) {
     super();
     this.version = version;
     LOG.finest(operName + "has CommGroupHandler-" + commGroupNetworkHandler.toString());
@@ -75,38 +74,38 @@ public class BroadcastSender<T> implements Broadcast.Sender<T>, EventHandler<Gro
   }
 
   @Override
-  public int getVersion () {
+  public int getVersion() {
     return version;
   }
 
   @Override
-  public void initialize () throws ParentDeadException {
+  public void initialize() throws ParentDeadException {
     topology.initialize();
   }
 
   @Override
-  public Class<? extends Name<String>> getOperName () {
+  public Class<? extends Name<String>> getOperName() {
     return operName;
   }
 
   @Override
-  public Class<? extends Name<String>> getGroupName () {
+  public Class<? extends Name<String>> getGroupName() {
     return groupName;
   }
 
   @Override
-  public String toString () {
+  public String toString() {
     return "BroadcastSender:" + Utils.simpleName(groupName) + ":" + Utils.simpleName(operName) + ":" + version;
   }
 
   @Override
-  public void onNext (final GroupCommunicationMessage msg) {
+  public void onNext(final GroupCommunicationMessage msg) {
     topology.handle(msg);
   }
 
   @Override
-  public void send (final T element) throws NetworkException, InterruptedException {
-    LOG.entering("BroadcastSender", "send", new Object[] { this, element });
+  public void send(final T element) throws NetworkException, InterruptedException {
+    LOG.entering("BroadcastSender", "send", new Object[]{this, element});
     LOG.fine("I am " + this);
 
     if (init.compareAndSet(false, true)) {
@@ -121,7 +120,7 @@ public class BroadcastSender<T> implements Broadcast.Sender<T>, EventHandler<Gro
     } catch (final ParentDeadException e) {
       throw new RuntimeException("ParentDeadException", e);
     }
-    LOG.exiting("BroadcastSender", "send", Arrays.toString(new Object[] { this, element }));
+    LOG.exiting("BroadcastSender", "send", Arrays.toString(new Object[]{this, element}));
   }
 
 }

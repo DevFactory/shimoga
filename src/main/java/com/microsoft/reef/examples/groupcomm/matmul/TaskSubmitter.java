@@ -3,20 +3,20 @@
  */
 package com.microsoft.reef.examples.groupcomm.matmul;
 
-import com.microsoft.reef.driver.context.ActiveContext;
-import com.microsoft.reef.driver.task.TaskConfiguration;
 import com.microsoft.reef.io.network.group.config.GroupOperators;
-import com.microsoft.reef.io.network.impl.BindNSToTask;
-import com.microsoft.reef.io.network.naming.NameServer;
-import com.microsoft.reef.io.network.util.StringIdentifier;
-import com.microsoft.reef.io.network.util.StringIdentifierFactory;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.JavaConfigurationBuilder;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.exceptions.BindException;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.EventHandler;
-import com.microsoft.wake.remote.NetUtils;
+import org.apache.reef.driver.context.ActiveContext;
+import org.apache.reef.driver.task.TaskConfiguration;
+import org.apache.reef.io.network.impl.BindNSToTask;
+import org.apache.reef.io.network.naming.NameServer;
+import org.apache.reef.io.network.util.StringIdentifier;
+import org.apache.reef.io.network.util.StringIdentifierFactory;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.JavaConfigurationBuilder;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.exceptions.BindException;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.EventHandler;
+import org.apache.reef.wake.remote.NetUtils;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -204,10 +204,10 @@ public class TaskSubmitter implements EventHandler<Iterable<ActiveContext>> {
       final JavaConfigurationBuilder b = Tang.Factory.getTang().newConfigurationBuilder();
       b.addConfiguration(operators.getConfig(compTaskId));
       b.addConfiguration(TaskConfiguration.CONF
-        .set(TaskConfiguration.IDENTIFIER, compTaskId.toString())
-        .set(TaskConfiguration.TASK, ComputeTask.class)
-        .set(TaskConfiguration.ON_TASK_STARTED, BindNSToTask.class)
-        .build());
+          .set(TaskConfiguration.IDENTIFIER, compTaskId.toString())
+          .set(TaskConfiguration.TASK, ComputeTask.class)
+          .set(TaskConfiguration.ON_TASK_STARTED, BindNSToTask.class)
+          .build());
       return b.build();
     } catch (BindException e) {
       logger.log(

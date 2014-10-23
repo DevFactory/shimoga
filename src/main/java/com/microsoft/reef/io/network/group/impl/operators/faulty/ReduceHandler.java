@@ -3,17 +3,17 @@
  */
 package com.microsoft.reef.io.network.group.impl.operators.faulty;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
-import com.microsoft.reef.io.network.Message;
 import com.microsoft.reef.io.network.group.impl.operators.faulty.BroadRedHandler.IDs;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupMessageBody;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.wake.EventHandler;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.IdentifierFactory;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.Message;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.wake.EventHandler;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.IdentifierFactory;
+import org.apache.reef.wake.remote.Codec;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -67,7 +67,7 @@ public final class ReduceHandler implements EventHandler<Message<GroupCommMessag
     final Identifier srcId = this.idFac.getNewInstance(oneVal.getSrcid());
 
     try {
-      LOG.log(Level.FINEST, "\t\t{0} from: {1}", new Object[] { oneVal.getType(), srcId });
+      LOG.log(Level.FINEST, "\t\t{0} from: {1}", new Object[]{oneVal.getType(), srcId});
       switch (oneVal.getType()) {
         case SourceAdd:
           this.ctrlQue.put(oneVal);
@@ -116,11 +116,11 @@ public final class ReduceHandler implements EventHandler<Message<GroupCommMessag
       final int status = isIdAlive.get(identifier);
       if (status < 0) {
         LOG.log(Level.FINEST,
-            "{0} is dead({1}). Removing from handler", new Object[] { identifier, status });
+            "{0} is dead({1}). Removing from handler", new Object[]{identifier, status});
         removeChild(identifier);
       } else if (status > 0) {
         LOG.log(Level.FINEST,
-            "{0} is alive({1}). Adding to handler", new Object[] { identifier, status });
+            "{0} is alive({1}). Adding to handler", new Object[]{identifier, status});
         addChild(identifier);
       } else {
         //status == 0

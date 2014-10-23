@@ -3,18 +3,16 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd.data.parser;
 
+import com.microsoft.reef.examples.nggroup.bgd.data.Example;
+import com.microsoft.reef.examples.nggroup.bgd.data.SparseExample;
+import org.apache.commons.lang.StringUtils;
+
+import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.microsoft.reef.examples.nggroup.bgd.data.Example;
-import com.microsoft.reef.examples.nggroup.bgd.data.SparseExample;
 
 /**
  * A Parser for SVMLight records
@@ -34,8 +32,8 @@ public class SVMLightParser implements Parser<String> {
     final String[] entries = StringUtils.split(line, ' ');
     String labelStr = entries[0];
 
-    final boolean pipeExists = labelStr.indexOf('|')!=-1;
-    if(pipeExists) {
+    final boolean pipeExists = labelStr.indexOf('|') != -1;
+    if (pipeExists) {
       labelStr = labelStr.substring(0, labelStr.indexOf('|'));
     }
     double label = Double.parseDouble(labelStr);

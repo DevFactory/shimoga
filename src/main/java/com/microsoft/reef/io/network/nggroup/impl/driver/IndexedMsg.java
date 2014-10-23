@@ -5,7 +5,7 @@ package com.microsoft.reef.io.network.nggroup.impl.driver;
 
 import com.microsoft.reef.io.network.nggroup.impl.GroupCommunicationMessage;
 import com.microsoft.reef.io.network.nggroup.impl.utils.Utils;
-import com.microsoft.tang.annotations.Name;
+import org.apache.reef.tang.annotations.Name;
 
 /**
  * Helper class to wrap msg and the operator name in the msg
@@ -14,27 +14,27 @@ public class IndexedMsg {
   private final Class<? extends Name<String>> operName;
   private final GroupCommunicationMessage msg;
 
-  public IndexedMsg (final GroupCommunicationMessage msg) {
+  public IndexedMsg(final GroupCommunicationMessage msg) {
     super();
     this.operName = Utils.getClass(msg.getOperatorname());
     this.msg = msg;
   }
 
-  public Class<? extends Name<String>> getOperName () {
+  public Class<? extends Name<String>> getOperName() {
     return operName;
   }
 
-  public GroupCommunicationMessage getMsg () {
+  public GroupCommunicationMessage getMsg() {
     return msg;
   }
 
   @Override
-  public int hashCode () {
+  public int hashCode() {
     return operName.getName().hashCode();
   }
 
   @Override
-  public boolean equals (final Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -49,7 +49,7 @@ public class IndexedMsg {
   }
 
   @Override
-  public String toString () {
+  public String toString() {
     return operName.getSimpleName();
   }
 

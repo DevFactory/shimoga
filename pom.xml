@@ -11,43 +11,43 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <reef.version>0.9-SNAPSHOT</reef.version>
+        <reef.version>0.10-incubating-SNAPSHOT</reef.version>
         <hadoop.version>2.4.0</hadoop.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.microsoft.reef</groupId>
+            <groupId>org.apache.reef</groupId>
             <artifactId>reef-common</artifactId>
             <version>${reef.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.reef</groupId>
+            <groupId>org.apache.reef</groupId>
             <artifactId>reef-io</artifactId>
             <version>${reef.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.reef</groupId>
+            <groupId>org.apache.reef</groupId>
             <artifactId>reef-runtime-local</artifactId>
             <version>${reef.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.reef</groupId>
+            <groupId>org.apache.reef</groupId>
             <artifactId>reef-runtime-yarn</artifactId>
             <version>${reef.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.reef</groupId>
+            <groupId>org.apache.reef</groupId>
             <artifactId>reef-poison</artifactId>
             <version>${reef.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.tang</groupId>
+            <groupId>org.apache.reef</groupId>
             <artifactId>tang</artifactId>
             <version>${reef.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.wake</groupId>
+            <groupId>org.apache.reef</groupId>
             <artifactId>wake</artifactId>
             <version>${reef.version}</version>
         </dependency>
@@ -55,7 +55,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
-            <scope>test</scope>            
+            <scope>test</scope>
         </dependency>
         <!-- HADOOP -->
         <dependency>
@@ -72,10 +72,10 @@
         </dependency>
         <!-- End of HADOOP -->
         <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-java</artifactId>
-                <version>2.5.0</version>
-            </dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.5.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -107,11 +107,11 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <tasks>
-                                <mkdir dir="target/generated-sources/proto" />
+                                <mkdir dir="target/generated-sources/proto"/>
                                 <exec executable="protoc">
-                                    <arg value="--proto_path=src/main/proto/" />
-                                    <arg value="--java_out=target/generated-sources/proto" />
-                                    <arg value="src/main/proto/group_comm_protocol.proto" />
+                                    <arg value="--proto_path=src/main/proto/"/>
+                                    <arg value="--java_out=target/generated-sources/proto"/>
+                                    <arg value="src/main/proto/group_comm_protocol.proto"/>
                                 </exec>
                             </tasks>
                             <sourceRoot>target/generated-sources/proto</sourceRoot>

@@ -1,44 +1,27 @@
 /**
  * Copyright (C) 2014 Microsoft Corporation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package com.microsoft.reef.examples.nggroup.tron;
 
-import javax.inject.Inject;
-
-import org.apache.hadoop.mapred.TextInputFormat;
-
-import com.microsoft.reef.client.DriverConfiguration;
-import com.microsoft.reef.client.DriverLauncher;
-import com.microsoft.reef.client.LauncherStatus;
-import com.microsoft.reef.client.REEF;
-import com.microsoft.reef.driver.evaluator.EvaluatorRequest;
-import com.microsoft.reef.examples.nggroup.tron.parameters.TRONControlParameters;
-import com.microsoft.reef.examples.nggroup.tron.parameters.EvaluatorMemory;
-import com.microsoft.reef.examples.nggroup.tron.parameters.InputDir;
-import com.microsoft.reef.examples.nggroup.tron.parameters.NumSplits;
-import com.microsoft.reef.examples.nggroup.tron.parameters.Timeout;
-import com.microsoft.reef.io.data.loading.api.DataLoadingRequestBuilder;
+import com.microsoft.reef.examples.nggroup.tron.parameters.*;
 import com.microsoft.reef.io.network.nggroup.impl.config.parameters.TreeTopologyFanOut;
 import com.microsoft.reef.io.network.nggroup.impl.driver.GroupCommService;
-import com.microsoft.reef.util.EnvironmentUtils;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.Configurations;
-import com.microsoft.tang.JavaConfigurationBuilder;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.tang.formats.CommandLine;
+import org.apache.hadoop.mapred.TextInputFormat;
+import org.apache.reef.client.DriverConfiguration;
+import org.apache.reef.client.DriverLauncher;
+import org.apache.reef.client.LauncherStatus;
+import org.apache.reef.client.REEF;
+import org.apache.reef.driver.evaluator.EvaluatorRequest;
+import org.apache.reef.io.data.loading.api.DataLoadingRequestBuilder;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.Configurations;
+import org.apache.reef.tang.JavaConfigurationBuilder;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.tang.formats.CommandLine;
+import org.apache.reef.util.EnvironmentUtils;
+
+import javax.inject.Inject;
 
 /**
  * A client to submit BGD Jobs
@@ -53,10 +36,10 @@ public class TRONClient {
 
   @Inject
   public TRONClient(final @Parameter(InputDir.class) String input,
-                   final @Parameter(NumSplits.class) int numSplits,
-                   final @Parameter(EvaluatorMemory.class) int memory,
-                   final @Parameter(TreeTopologyFanOut.class) int fanOut,
-                   final TRONControlParameters tronControlParameters) {
+                    final @Parameter(NumSplits.class) int numSplits,
+                    final @Parameter(EvaluatorMemory.class) int memory,
+                    final @Parameter(TreeTopologyFanOut.class) int fanOut,
+                    final TRONControlParameters tronControlParameters) {
     this.input = input;
     this.fanOut = fanOut;
     this.tronControlParameters = tronControlParameters;

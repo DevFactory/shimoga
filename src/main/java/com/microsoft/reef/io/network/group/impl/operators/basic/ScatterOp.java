@@ -3,7 +3,6 @@
  */
 package com.microsoft.reef.io.network.group.impl.operators.basic;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
 import com.microsoft.reef.io.network.group.impl.GroupCommNetworkHandler;
 import com.microsoft.reef.io.network.group.impl.operators.ReceiverHelper;
 import com.microsoft.reef.io.network.group.impl.operators.ReceiverHelperImpl;
@@ -11,16 +10,17 @@ import com.microsoft.reef.io.network.group.impl.operators.SenderHelper;
 import com.microsoft.reef.io.network.group.impl.operators.SenderHelperImpl;
 import com.microsoft.reef.io.network.group.impl.operators.basic.config.GroupParameters;
 import com.microsoft.reef.io.network.group.operators.Scatter;
-import com.microsoft.reef.io.network.impl.NetworkService;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.reef.io.network.util.StringCodec;
-import com.microsoft.reef.io.network.util.Utils;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.IdentifierFactory;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.network.util.StringCodec;
+import org.apache.reef.io.network.util.Utils;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.IdentifierFactory;
+import org.apache.reef.wake.remote.Codec;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -46,10 +46,10 @@ public class ScatterOp implements Scatter {
         final @Parameter(GroupParameters.Scatter.SenderParams.ChildIds.class) String children,
         final @Parameter(GroupParameters.IDFactory.class) IdentifierFactory idFac) {
       super(new SenderHelperImpl<>(netService, codec),
-            new ReceiverHelperImpl<>(netService, new StringCodec(), multiHandler),
-            idFac.getNewInstance(self),
-            parent.equals(GroupParameters.defaultValue) ? null : idFac.getNewInstance(parent),
-            Utils.parseListCmp(children, idFac));
+          new ReceiverHelperImpl<>(netService, new StringCodec(), multiHandler),
+          idFac.getNewInstance(self),
+          parent.equals(GroupParameters.defaultValue) ? null : idFac.getNewInstance(parent),
+          Utils.parseListCmp(children, idFac));
     }
 
     public Sender(
@@ -67,7 +67,7 @@ public class ScatterOp implements Scatter {
       this.dataSender.send(getSelf(), order, elements, counts, Type.Scatter);
       final List<String> result = this.ackReceiver.receive(order, getSelf(), Type.Scatter);
       LOG.log(Level.FINEST, "{0} received: {1} from {2}",
-          new Object[] { getSelf(), result, getChildren() });
+          new Object[]{getSelf(), result, getChildren()});
     }
 
     @Override
@@ -102,11 +102,11 @@ public class ScatterOp implements Scatter {
         final @Parameter(GroupParameters.Scatter.ReceiverParams.ChildIds.class) String children,
         final @Parameter(GroupParameters.IDFactory.class) IdentifierFactory idFac) {
       super(new ReceiverHelperImpl<>(netService, codec, multiHandler),
-            new SenderHelperImpl<>(netService, new StringCodec()),
-            idFac.getNewInstance(self),
-            idFac.getNewInstance(parent),
-            children.equals(GroupParameters.defaultValue) ?
-                null : Utils.parseListCmp(children, idFac));
+          new SenderHelperImpl<>(netService, new StringCodec()),
+          idFac.getNewInstance(self),
+          idFac.getNewInstance(parent),
+          children.equals(GroupParameters.defaultValue) ?
+              null : Utils.parseListCmp(children, idFac));
     }
 
     public Receiver(
@@ -121,7 +121,7 @@ public class ScatterOp implements Scatter {
     public List<T> receive() throws InterruptedException, NetworkException {
       final List<T> result = this.dataReceiver.receiveList(getParent(), getSelf(), Type.Scatter);
       LOG.log(Level.FINEST, "{0} received: {1} from {2}",
-          new Object[] { getSelf(), result, getParent() });
+          new Object[]{getSelf(), result, getParent()});
       this.ackSender.send(getSelf(), getParent(), "ACK", Type.Scatter);
       return result;
     }

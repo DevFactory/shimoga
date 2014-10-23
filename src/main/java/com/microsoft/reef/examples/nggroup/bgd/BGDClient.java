@@ -3,30 +3,25 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd;
 
-import javax.inject.Inject;
-
-import org.apache.hadoop.mapred.TextInputFormat;
-
-import com.microsoft.reef.client.DriverConfiguration;
-import com.microsoft.reef.client.DriverLauncher;
-import com.microsoft.reef.client.LauncherStatus;
-import com.microsoft.reef.client.REEF;
-import com.microsoft.reef.driver.evaluator.EvaluatorRequest;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.BGDControlParameters;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.EvaluatorMemory;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.InputDir;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.NumSplits;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.Timeout;
-import com.microsoft.reef.io.data.loading.api.DataLoadingRequestBuilder;
+import com.microsoft.reef.examples.nggroup.bgd.parameters.*;
 import com.microsoft.reef.io.network.nggroup.impl.config.parameters.TreeTopologyFanOut;
 import com.microsoft.reef.io.network.nggroup.impl.driver.GroupCommService;
-import com.microsoft.reef.util.EnvironmentUtils;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.Configurations;
-import com.microsoft.tang.JavaConfigurationBuilder;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.tang.formats.CommandLine;
+import org.apache.hadoop.mapred.TextInputFormat;
+import org.apache.reef.client.DriverConfiguration;
+import org.apache.reef.client.DriverLauncher;
+import org.apache.reef.client.LauncherStatus;
+import org.apache.reef.client.REEF;
+import org.apache.reef.driver.evaluator.EvaluatorRequest;
+import org.apache.reef.io.data.loading.api.DataLoadingRequestBuilder;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.Configurations;
+import org.apache.reef.tang.JavaConfigurationBuilder;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.tang.formats.CommandLine;
+import org.apache.reef.util.EnvironmentUtils;
+
+import javax.inject.Inject;
 
 /**
  * A client to submit BGD Jobs

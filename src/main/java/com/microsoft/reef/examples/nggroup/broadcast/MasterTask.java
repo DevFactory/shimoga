@@ -15,8 +15,8 @@ import com.microsoft.reef.io.network.group.operators.Reduce;
 import com.microsoft.reef.io.network.nggroup.api.GroupChanges;
 import com.microsoft.reef.io.network.nggroup.api.task.CommunicationGroupClient;
 import com.microsoft.reef.io.network.nggroup.api.task.GroupCommClient;
-import com.microsoft.reef.task.Task;
-import com.microsoft.tang.annotations.Parameter;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.task.Task;
 import org.mortbay.log.Log;
 
 import javax.inject.Inject;
@@ -73,7 +73,7 @@ public class MasterTask implements Task {
 
     final long time2 = System.currentTimeMillis();
     LOG.log(Level.FINE, "Broadcasting vector of dimensions {0} took {1} secs",
-        new Object[] { dimensions, (time2 - time1) / (numIters * 1000.0) });
+        new Object[]{dimensions, (time2 - time1) / (numIters * 1000.0)});
 
     controlMessageBroadcaster.send(ControlMessages.Stop);
 

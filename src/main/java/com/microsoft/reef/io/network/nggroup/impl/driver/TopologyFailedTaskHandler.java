@@ -3,10 +3,10 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.driver;
 
-import java.util.logging.Logger;
+import org.apache.reef.driver.task.FailedTask;
+import org.apache.reef.wake.EventHandler;
 
-import com.microsoft.reef.driver.task.FailedTask;
-import com.microsoft.wake.EventHandler;
+import java.util.logging.Logger;
 
 public class TopologyFailedTaskHandler implements EventHandler<FailedTask> {
 
@@ -15,12 +15,12 @@ public class TopologyFailedTaskHandler implements EventHandler<FailedTask> {
 
   private final CommunicationGroupDriverImpl communicationGroupDriverImpl;
 
-  public TopologyFailedTaskHandler (final CommunicationGroupDriverImpl communicationGroupDriverImpl) {
+  public TopologyFailedTaskHandler(final CommunicationGroupDriverImpl communicationGroupDriverImpl) {
     this.communicationGroupDriverImpl = communicationGroupDriverImpl;
   }
 
   @Override
-  public void onNext (final FailedTask failedTask) {
+  public void onNext(final FailedTask failedTask) {
     final String failedTaskId = failedTask.getId();
     LOG.entering("TopologyFailedTaskHandler", "onNext", failedTaskId);
     communicationGroupDriverImpl.failTask(failedTaskId);

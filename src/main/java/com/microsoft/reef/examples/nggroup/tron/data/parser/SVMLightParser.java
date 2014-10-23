@@ -1,32 +1,18 @@
 /**
  * Copyright (C) 2014 Microsoft Corporation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package com.microsoft.reef.examples.nggroup.tron.data.parser;
 
+import com.microsoft.reef.examples.nggroup.tron.data.Example;
+import com.microsoft.reef.examples.nggroup.tron.data.SparseExample;
+import org.apache.commons.lang.StringUtils;
+
+import javax.inject.Inject;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.microsoft.reef.examples.nggroup.tron.data.Example;
-import com.microsoft.reef.examples.nggroup.tron.data.SparseExample;
 
 /**
  * A Parser for SVMLight records
@@ -48,8 +34,8 @@ public class SVMLightParser implements FeatureParser<String> {
     final String[] entries = StringUtils.split(line, ' ');
     String labelStr = entries[0];
 
-    final boolean pipeExists = labelStr.indexOf('|')!=-1;
-    if(pipeExists) {
+    final boolean pipeExists = labelStr.indexOf('|') != -1;
+    if (pipeExists) {
       labelStr = labelStr.substring(0, labelStr.indexOf('|'));
     }
     double label = Double.parseDouble(labelStr);
@@ -64,7 +50,7 @@ public class SVMLightParser implements FeatureParser<String> {
       final int offset = pipeExists ? 0 : 1;
       indices[j - 1] = Integer.parseInt(entity[0]) - offset;
       values[j - 1] = Float.parseFloat(entity[1]);
-      if(j==entries.length-1) {
+      if (j == entries.length - 1) {
         dimensions = Math.max(indices[j - 1] + 1, dimensions);
       }
     }
@@ -73,7 +59,7 @@ public class SVMLightParser implements FeatureParser<String> {
 
 
   @Override
-  public int getDimensionality () {
+  public int getDimensionality() {
     return dimensions;
   }
 

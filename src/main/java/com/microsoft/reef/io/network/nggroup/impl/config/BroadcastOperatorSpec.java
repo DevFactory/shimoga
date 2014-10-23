@@ -5,7 +5,7 @@ package com.microsoft.reef.io.network.nggroup.impl.config;
 
 import com.microsoft.reef.io.network.nggroup.api.config.OperatorSpec;
 import com.microsoft.reef.io.network.nggroup.impl.utils.Utils;
-import com.microsoft.reef.io.serialization.Codec;
+import org.apache.reef.io.serialization.Codec;
 
 
 /**
@@ -37,16 +37,16 @@ public class BroadcastOperatorSpec implements OperatorSpec {
   }
 
   @Override
-  public String toString () {
+  public String toString() {
     return "Broadcast Operator Spec: [sender=" + senderId + "] [dataCodecClass=" + Utils.simpleName(dataCodecClass)
-           + "]";
+        + "]";
   }
 
   public static Builder newBuilder() {
     return new BroadcastOperatorSpec.Builder();
   }
 
-  public static class Builder implements com.microsoft.reef.util.Builder<BroadcastOperatorSpec> {
+  public static class Builder implements org.apache.reef.util.Builder<BroadcastOperatorSpec> {
     private String senderId;
 
     private Class<? extends Codec> dataCodecClass;

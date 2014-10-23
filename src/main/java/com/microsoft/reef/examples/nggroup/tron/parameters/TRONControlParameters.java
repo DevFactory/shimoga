@@ -1,27 +1,15 @@
-/*
- * Copyright 2013 Microsoft.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/**
+ * Copyright (C) 2014 Microsoft Corporation
  */
 package com.microsoft.reef.examples.nggroup.tron.parameters;
 
-import javax.inject.Inject;
-
 import com.microsoft.reef.examples.nggroup.tron.loss.LossFunction;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.tang.formats.CommandLine;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.tang.formats.CommandLine;
+
+import javax.inject.Inject;
 
 public final class TRONControlParameters {
 
@@ -37,14 +25,14 @@ public final class TRONControlParameters {
 
   @Inject
   public TRONControlParameters(
-          final @Parameter(ModelDimensions.class) int dimensions,
-          final @Parameter(Lambda.class) double lambda,
-          final @Parameter(Eps.class) double eps,
-          final @Parameter(ProbabilityOfSuccesfulIteration.class) double probOfSuccessfulIteration,
-          final @Parameter(Iterations.class) int iters,
-          final @Parameter(EnableRampup.class) boolean rampup,
-          final @Parameter(MinParts.class) int minParts,
-          final TRONLossType lossType) {
+      final @Parameter(ModelDimensions.class) int dimensions,
+      final @Parameter(Lambda.class) double lambda,
+      final @Parameter(Eps.class) double eps,
+      final @Parameter(ProbabilityOfSuccesfulIteration.class) double probOfSuccessfulIteration,
+      final @Parameter(Iterations.class) int iters,
+      final @Parameter(EnableRampup.class) boolean rampup,
+      final @Parameter(MinParts.class) int minParts,
+      final TRONLossType lossType) {
     this.dimensions = dimensions;
     this.lambda = lambda;
     this.eps = eps;

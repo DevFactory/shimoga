@@ -3,24 +3,24 @@
  */
 package com.microsoft.reef.services.network.group;
 
-import com.microsoft.reef.io.network.Message;
 import com.microsoft.reef.io.network.group.impl.GroupCommNetworkHandler;
 import com.microsoft.reef.io.network.group.impl.Handler;
-import com.microsoft.reef.io.network.impl.NSMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.reef.io.network.util.StringIdentifierFactory;
-import com.microsoft.reef.io.network.util.Utils;
 import com.microsoft.reef.services.network.util.TestUtils;
-import com.microsoft.tang.JavaConfigurationBuilder;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.exceptions.BindException;
-import com.microsoft.tang.exceptions.InjectionException;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.EStage;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.impl.SingleThreadStage;
+import org.apache.reef.io.network.Message;
+import org.apache.reef.io.network.impl.NSMessage;
+import org.apache.reef.io.network.util.StringIdentifierFactory;
+import org.apache.reef.io.network.util.Utils;
+import org.apache.reef.tang.JavaConfigurationBuilder;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.exceptions.BindException;
+import org.apache.reef.tang.exceptions.InjectionException;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.EStage;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.impl.SingleThreadStage;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -112,7 +112,7 @@ public class GroupCommNetworkHandlerTest {
   }
 
   /**
-   * Test method for {@link com.microsoft.reef.io.network.group.impl.GroupCommNetworkHandler#onNext(com.microsoft.reef.io.network.Message)}.
+   * Test method for {@link com.microsoft.reef.io.network.group.impl.GroupCommNetworkHandler#onNext(org.apache.reef.io.network.Message)}.
    *
    * @throws Exception
    */

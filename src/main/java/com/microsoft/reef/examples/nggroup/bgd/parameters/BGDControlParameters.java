@@ -3,13 +3,13 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd.parameters;
 
-import javax.inject.Inject;
-
 import com.microsoft.reef.examples.nggroup.bgd.loss.LossFunction;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.tang.formats.CommandLine;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.tang.formats.CommandLine;
+
+import javax.inject.Inject;
 
 public final class BGDControlParameters {
 
@@ -26,15 +26,15 @@ public final class BGDControlParameters {
 
   @Inject
   public BGDControlParameters(
-          final @Parameter(ModelDimensions.class) int dimensions,
-          final @Parameter(Lambda.class) double lambda,
-          final @Parameter(Eps.class) double eps,
-          final @Parameter(Eta.class) double eta,
-          final @Parameter(ProbabilityOfSuccesfulIteration.class) double probOfSuccessfulIteration,
-          final @Parameter(Iterations.class) int iters,
-          final @Parameter(EnableRampup.class) boolean rampup,
-          final @Parameter(MinParts.class) int minParts,
-          final BGDLossType lossType) {
+      final @Parameter(ModelDimensions.class) int dimensions,
+      final @Parameter(Lambda.class) double lambda,
+      final @Parameter(Eps.class) double eps,
+      final @Parameter(Eta.class) double eta,
+      final @Parameter(ProbabilityOfSuccesfulIteration.class) double probOfSuccessfulIteration,
+      final @Parameter(Iterations.class) int iters,
+      final @Parameter(EnableRampup.class) boolean rampup,
+      final @Parameter(MinParts.class) int minParts,
+      final BGDLossType lossType) {
     this.dimensions = dimensions;
     this.lambda = lambda;
     this.eps = eps;

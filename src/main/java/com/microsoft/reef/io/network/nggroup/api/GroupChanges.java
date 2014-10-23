@@ -3,7 +3,7 @@
  */
 package com.microsoft.reef.io.network.nggroup.api;
 
-import com.microsoft.reef.annotations.audience.TaskSide;
+import org.apache.reef.annotations.audience.TaskSide;
 
 /**
  * Represents the changes in Topology that happened in a communication group
@@ -12,5 +12,5 @@ import com.microsoft.reef.annotations.audience.TaskSide;
 @TaskSide
 public interface GroupChanges {
 
-  boolean exist ();
+  boolean exist();
 }

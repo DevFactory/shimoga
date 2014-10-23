@@ -3,18 +3,18 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd.utils;
 
-import com.microsoft.reef.driver.task.TaskConfiguration;
-import com.microsoft.reef.driver.task.TaskConfigurationOptions;
 import com.microsoft.reef.examples.nggroup.bgd.MasterTask;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.Injector;
-import com.microsoft.tang.JavaConfigurationBuilder;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.tang.exceptions.BindException;
-import com.microsoft.tang.exceptions.InjectionException;
-import com.microsoft.tang.formats.AvroConfigurationSerializer;
-import com.microsoft.tang.formats.ConfigurationSerializer;
+import org.apache.reef.driver.task.TaskConfiguration;
+import org.apache.reef.driver.task.TaskConfigurationOptions;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.Injector;
+import org.apache.reef.tang.JavaConfigurationBuilder;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.tang.exceptions.BindException;
+import org.apache.reef.tang.exceptions.InjectionException;
+import org.apache.reef.tang.formats.AvroConfigurationSerializer;
+import org.apache.reef.tang.formats.ConfigurationSerializer;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

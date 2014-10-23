@@ -3,10 +3,10 @@
  */
 package com.microsoft.reef.io.network.nggroup.api.task;
 
-import com.microsoft.reef.annotations.Provided;
-import com.microsoft.reef.annotations.audience.TaskSide;
-import com.microsoft.tang.annotations.DefaultImplementation;
-import com.microsoft.tang.annotations.Name;
+import org.apache.reef.annotations.Provided;
+import org.apache.reef.annotations.audience.TaskSide;
+import org.apache.reef.tang.annotations.DefaultImplementation;
+import org.apache.reef.tang.annotations.Name;
 
 
 /**
@@ -20,7 +20,7 @@ public interface GroupCommClient {
   /**
    * @param string
    * @return The communication group client with the given name that gives access
-   *         to the operators configured on it that will be used to do group communication
+   * to the operators configured on it that will be used to do group communication
    */
   CommunicationGroupClient getCommunicationGroup(Class<? extends Name<String>> groupName);
 }

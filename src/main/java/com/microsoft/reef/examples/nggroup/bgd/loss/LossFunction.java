@@ -3,7 +3,7 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd.loss;
 
-import com.microsoft.tang.annotations.DefaultImplementation;
+import org.apache.reef.tang.annotations.DefaultImplementation;
 
 /**
  * Interface for Loss Functions.

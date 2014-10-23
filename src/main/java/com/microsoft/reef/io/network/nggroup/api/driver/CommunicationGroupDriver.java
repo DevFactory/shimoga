@@ -3,12 +3,12 @@
  */
 package com.microsoft.reef.io.network.nggroup.api.driver;
 
-import com.microsoft.reef.annotations.audience.DriverSide;
 import com.microsoft.reef.io.network.nggroup.api.task.GroupCommClient;
 import com.microsoft.reef.io.network.nggroup.impl.config.BroadcastOperatorSpec;
 import com.microsoft.reef.io.network.nggroup.impl.config.ReduceOperatorSpec;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.annotations.Name;
+import org.apache.reef.annotations.audience.DriverSide;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.annotations.Name;
 
 /**
  * The driver side interface of a Communication Group
@@ -55,6 +55,7 @@ public interface CommunicationGroupDriver {
    * current communication group and the operators configured
    * on it available on the Task side. Provides for injection
    * of {@link GroupCommClient}
+   *
    * @param taskConf
    * @return
    */
@@ -64,6 +65,7 @@ public interface CommunicationGroupDriver {
    * Add the task represented by this configuration to this
    * communication group. The configuration needs to contain
    * the id of the Task that will be used
+   *
    * @param partialTaskConf
    */
   public void addTask(Configuration partialTaskConf);

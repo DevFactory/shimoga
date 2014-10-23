@@ -5,7 +5,7 @@ package com.microsoft.reef.io.network.group.impl.operators;
 
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.wake.Identifier;
+import org.apache.reef.wake.Identifier;
 
 import java.util.List;
 

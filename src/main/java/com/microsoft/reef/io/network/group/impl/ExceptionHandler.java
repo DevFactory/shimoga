@@ -3,8 +3,8 @@
  */
 package com.microsoft.reef.io.network.group.impl;
 
-import com.microsoft.reef.io.network.impl.NetworkService;
-import com.microsoft.wake.EventHandler;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.wake.EventHandler;
 
 import javax.inject.Inject;
 import java.util.logging.Logger;

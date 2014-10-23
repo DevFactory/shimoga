@@ -3,10 +3,10 @@
  */
 package com.microsoft.reef.io.network.group.impl.config;
 
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.JavaConfigurationBuilder;
-import com.microsoft.tang.exceptions.BindException;
-import com.microsoft.wake.ComparableIdentifier;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.JavaConfigurationBuilder;
+import org.apache.reef.tang.exceptions.BindException;
+import org.apache.reef.wake.ComparableIdentifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;

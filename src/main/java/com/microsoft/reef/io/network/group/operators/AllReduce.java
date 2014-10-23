@@ -3,11 +3,11 @@
  */
 package com.microsoft.reef.io.network.group.operators;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
 import com.microsoft.reef.io.network.group.impl.operators.basic.AllReduceOp;
 import com.microsoft.reef.io.network.group.operators.Reduce.ReduceFunction;
-import com.microsoft.tang.annotations.DefaultImplementation;
-import com.microsoft.wake.Identifier;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.tang.annotations.DefaultImplementation;
+import org.apache.reef.wake.Identifier;
 
 import java.util.List;
 
@@ -17,13 +17,13 @@ import java.util.List;
  * function on the list of all elements on which this operator has been applied
  */
 @DefaultImplementation(AllReduceOp.class)
-public interface AllReduce<T> extends GroupCommOperator{
+public interface AllReduce<T> extends GroupCommOperator {
 
   /**
    * Apply the operation on element.
    *
    * @return result of all-reduce on all elements operation was applied on.
-   *         Reduce function is applied based on default order.
+   * Reduce function is applied based on default order.
    */
   T apply(T aElement) throws InterruptedException, NetworkException;
 
@@ -31,7 +31,7 @@ public interface AllReduce<T> extends GroupCommOperator{
    * Apply the operation on element.
    *
    * @return result of all-reduce on all elements operation was applied on.
-   *         Reduce function is applied based on specified order.
+   * Reduce function is applied based on specified order.
    */
   T apply(T element, List<? extends Identifier> order) throws InterruptedException, NetworkException;
 

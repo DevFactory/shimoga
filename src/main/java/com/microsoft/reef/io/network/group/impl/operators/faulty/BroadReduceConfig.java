@@ -3,14 +3,14 @@
  */
 package com.microsoft.reef.io.network.group.impl.operators.faulty;
 
-import java.util.Set;
-
 import com.microsoft.reef.io.network.group.operators.Reduce;
-import com.microsoft.reef.io.network.util.StringIdentifierFactory;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.tang.annotations.NamedParameter;
-import com.microsoft.wake.IdentifierFactory;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.io.network.util.StringIdentifierFactory;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.tang.annotations.NamedParameter;
+import org.apache.reef.wake.IdentifierFactory;
+import org.apache.reef.wake.remote.Codec;
+
+import java.util.Set;
 
 public class BroadReduceConfig {
   public static final String defaultValue = "NULL";
@@ -79,7 +79,7 @@ public class BroadReduceConfig {
       public static class ChildIds implements Name<Set<String>> {
       }
 
-      @NamedParameter(doc="Whether gradient from failed task needs to be approximated", default_value="true")
+      @NamedParameter(doc = "Whether gradient from failed task needs to be approximated", default_value = "true")
       public static class ApproximateGradient implements Name<Boolean> {
 
       }

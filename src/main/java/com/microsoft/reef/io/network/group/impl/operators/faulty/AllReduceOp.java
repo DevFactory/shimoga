@@ -3,17 +3,17 @@
  */
 package com.microsoft.reef.io.network.group.impl.operators.faulty;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
-import com.microsoft.reef.io.network.Connection;
 import com.microsoft.reef.io.network.group.operators.Reduce.ReduceFunction;
-import com.microsoft.reef.io.network.impl.NetworkService;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.reef.io.network.util.Utils;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.IdentifierFactory;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.Connection;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.network.util.Utils;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.IdentifierFactory;
+import org.apache.reef.wake.remote.Codec;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class AllReduceOp<V> {
   public V apply(final V myData) throws NetworkFault, NetworkException, InterruptedException {
     LOG.log(Level.FINEST, "I am {0}", this.self);
     final V redVal = this.children == null ? applyLeaf(myData) : applyMidNode(myData);
-    LOG.log(Level.FINEST, "{0} returns {1}", new Object[] { this.self, redVal });
+    LOG.log(Level.FINEST, "{0} returns {1}", new Object[]{this.self, redVal});
     return redVal;
   }
 
@@ -118,13 +118,13 @@ public class AllReduceOp<V> {
       // Wait for the parent to aggregate and send back.
 
       LOG.log(Level.FINEST, "Sending {0} to parent: {1}",
-          new Object[] { redVal, this.parent });
+          new Object[]{redVal, this.parent});
 
       send(redVal, this.parent);
 
       LOG.log(Level.FINEST, "Waiting for {0}", this.parent);
       final V tVal = this.handler.get(this.parent, this.codec);
-      LOG.log(Level.FINEST, "Received {0} from {1}", new Object[] { tVal, this.parent });
+      LOG.log(Level.FINEST, "Received {0} from {1}", new Object[]{tVal, this.parent});
       if (tVal != null) {
         redVal = tVal;
       }
@@ -132,7 +132,7 @@ public class AllReduceOp<V> {
 
     // Send the reduced value to children:
     for (final Identifier child : this.children) {
-      LOG.log(Level.FINEST, "Sending {0} to child: {1}", new Object[] { redVal, child });
+      LOG.log(Level.FINEST, "Sending {0} to child: {1}", new Object[]{redVal, child});
       send(redVal, child);
     }
 
@@ -156,7 +156,7 @@ public class AllReduceOp<V> {
     }
 
     LOG.log(Level.FINEST, "I am leaf. Sending {0} to my parent: {1}",
-        new Object[] { myData, this.parent });
+        new Object[]{myData, this.parent});
 
     send(myData, this.parent);
 

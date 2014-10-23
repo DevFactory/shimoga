@@ -3,22 +3,18 @@
  */
 package com.microsoft.reef.io.network.group.impl.operators.basic;
 
+import com.microsoft.reef.io.network.group.operators.*;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.Identifier;
+
 import java.util.Collections;
 import java.util.List;
-
-import com.microsoft.reef.io.network.group.operators.AbstractGroupCommOperator;
-import com.microsoft.reef.io.network.group.operators.Broadcast;
-import com.microsoft.reef.io.network.group.operators.Gather;
-import com.microsoft.reef.io.network.group.operators.Reduce;
-import com.microsoft.reef.io.network.group.operators.Scatter;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.Identifier;
 
 /**
  * Base class for all asymmetric operators
  * {@link Scatter}, {@link Broadcast}, {@link Gather}, {@link Reduce}
  */
-public class SenderReceiverBase extends AbstractGroupCommOperator{
+public class SenderReceiverBase extends AbstractGroupCommOperator {
 
   private Identifier self;
   private Identifier parent;

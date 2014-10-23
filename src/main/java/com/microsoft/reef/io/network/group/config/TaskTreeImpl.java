@@ -3,9 +3,9 @@
  */
 package com.microsoft.reef.io.network.group.config;
 
-import com.microsoft.reef.io.network.util.StringIdentifierFactory;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.IdentifierFactory;
+import org.apache.reef.io.network.util.StringIdentifierFactory;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.IdentifierFactory;
 
 import java.util.*;
 import java.util.logging.Level;

@@ -5,8 +5,8 @@ package com.microsoft.reef.io.network.group.impl.config;
 
 import com.microsoft.reef.io.network.group.config.OP_TYPE;
 import com.microsoft.reef.io.network.group.operators.Reduce.ReduceFunction;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.remote.Codec;
 
 import java.util.List;
 
@@ -17,40 +17,46 @@ import java.util.List;
  * does not need Reduce while both ReduceScatter & AllReduce need it.
  */
 public class SymmetricOpDescription extends GroupOperatorDescription {
-  /** Tasks participating in this group. */
+  /**
+   * Tasks participating in this group.
+   */
   public final List<ComparableIdentifier> taskIds;
 
-  /** The reduce function to be used for operations that do reduction */
+  /**
+   * The reduce function to be used for operations that do reduction
+   */
   public final Class<? extends ReduceFunction<?>> redFuncClass;
 
   /**
    * Constructor for fields
-   * 
+   *
    * @param operatorType
    * @param dataCodecClass
    * @param taskIds
    * @param redFuncClass
    */
   public SymmetricOpDescription(OP_TYPE operatorType,
-      Class<? extends Codec<?>> dataCodecClass,
-      List<ComparableIdentifier> taskIds,
-      Class<? extends ReduceFunction<?>> redFuncClass) {
+                                Class<? extends Codec<?>> dataCodecClass,
+                                List<ComparableIdentifier> taskIds,
+                                Class<? extends ReduceFunction<?>> redFuncClass) {
     super(operatorType, dataCodecClass);
     this.taskIds = taskIds;
     this.redFuncClass = redFuncClass;
   }
-  
-  /** Builder for fluent description of operators */
-  public static class Builder implements com.microsoft.reef.util.Builder<SymmetricOpDescription>{
+
+  /**
+   * Builder for fluent description of operators
+   */
+  public static class Builder implements org.apache.reef.util.Builder<SymmetricOpDescription> {
 
     private OP_TYPE operatorType;
     private Class<? extends Codec<?>> dataCodecClass;
     private Class<? extends ReduceFunction<?>> redFuncClass;
     private List<ComparableIdentifier> tasks;
-    
+
     /**
      * Override the operator type which is typically automatically set
-     * 
+     *
      * @param operatorType
      * @return
      */
@@ -61,7 +67,7 @@ public class SymmetricOpDescription extends GroupOperatorDescription {
 
     /**
      * Set the Data Codec class typically inherited from GroupOperators
-     * 
+     *
      * @param dataCodecClass
      * @return
      */
@@ -72,7 +78,7 @@ public class SymmetricOpDescription extends GroupOperatorDescription {
 
     /**
      * Set the list of ids of senders
-     * 
+     *
      * @param tasks
      * @return
      */
@@ -84,7 +90,7 @@ public class SymmetricOpDescription extends GroupOperatorDescription {
 
     /**
      * Set the reduce function class to be used
-     * 
+     *
      * @param redFuncClass
      * @return
      */
@@ -102,7 +108,7 @@ public class SymmetricOpDescription extends GroupOperatorDescription {
     public SymmetricOpDescription build() {
       return new SymmetricOpDescription(operatorType, dataCodecClass, tasks, redFuncClass);
     }
-    
+
   }
 
 }

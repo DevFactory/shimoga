@@ -3,14 +3,13 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd.parameters;
 
-import javax.inject.Inject;
-
 import com.microsoft.reef.examples.nggroup.bgd.loss.LogisticLossFunction;
 import com.microsoft.reef.examples.nggroup.bgd.loss.LossFunction;
 import com.microsoft.reef.examples.nggroup.bgd.loss.SquaredErrorLossFunction;
 import com.microsoft.reef.examples.nggroup.bgd.loss.WeightedLogisticLossFunction;
-import com.microsoft.tang.annotations.Parameter;
+import org.apache.reef.tang.annotations.Parameter;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +20,7 @@ public class BGDLossType {
         put("logLoss", LogisticLossFunction.class);
         put("weightedLogLoss", WeightedLogisticLossFunction.class);
         put("squaredError", SquaredErrorLossFunction.class);
-  }};
+      }};
 
   private final Class<? extends LossFunction> lossFunction;
 
@@ -33,7 +32,7 @@ public class BGDLossType {
     this.lossFunction = LOSS_FUNCTIONS.get(lossFunctionStr);
     if (this.lossFunction == null) {
       throw new RuntimeException("Specified loss function type: " + lossFunctionStr +
-              " is not implemented. Supported types are logLoss|weightedLogLoss|squaredError");
+          " is not implemented. Supported types are logLoss|weightedLogLoss|squaredError");
     }
   }
 

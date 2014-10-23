@@ -3,19 +3,19 @@
  */
 package com.microsoft.reef.io.network.group.impl;
 
-import com.microsoft.reef.io.network.Message;
 import com.microsoft.reef.io.network.group.impl.operators.basic.config.GroupParameters;
 import com.microsoft.reef.io.network.group.operators.Gather;
-import com.microsoft.reef.io.network.impl.NetworkService;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.reef.io.network.util.Utils;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.tang.annotations.NamedParameter;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.wake.EventHandler;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.IdentifierFactory;
+import org.apache.reef.io.network.Message;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.network.util.Utils;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.tang.annotations.NamedParameter;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.wake.EventHandler;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.IdentifierFactory;
 
 import javax.inject.Inject;
 import java.util.HashMap;

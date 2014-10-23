@@ -3,7 +3,7 @@
  */
 package com.microsoft.reef.io.network.group.impl.operators.faulty;
 
-import com.microsoft.wake.Identifier;
+import org.apache.reef.wake.Identifier;
 
 import java.util.Map;
 import java.util.Set;
@@ -30,11 +30,11 @@ public final class SyncHelper {
       final int status = childStatus.get(childIdentifier);
       if (status < 0) {
         LOG.log(Level.FINEST, "RedReceiver: Removing {0} from children of {1}",
-            new Object[] { childIdentifier, self });
+            new Object[]{childIdentifier, self});
         childIdentifiers.remove(childIdentifier);
       } else if (status > 0) {
         LOG.log(Level.FINEST, "RedReceiver: Adding {0} from children of {1}",
-            new Object[] { childIdentifier, self });
+            new Object[]{childIdentifier, self});
         LOG.log(Level.FINEST, "RedReceiver: Adding " + childIdentifier + " to children of " + self);
         childIdentifiers.add(childIdentifier);
       } else {

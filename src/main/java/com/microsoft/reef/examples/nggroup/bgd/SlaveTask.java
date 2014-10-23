@@ -3,23 +3,11 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd;
 
-import java.util.List;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
 import com.microsoft.reef.examples.nggroup.bgd.data.Example;
-import com.microsoft.reef.examples.nggroup.bgd.data.parser.Parser;
 import com.microsoft.reef.examples.nggroup.bgd.loss.LossFunction;
 import com.microsoft.reef.examples.nggroup.bgd.math.DenseVector;
 import com.microsoft.reef.examples.nggroup.bgd.math.Vector;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.ControlMessageBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.DescentDirectionBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.LineSearchEvaluationsReducer;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.LossAndGradientReducer;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.MinEtaBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.ModelAndDescentDirectionBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.ModelBroadcaster;
+import com.microsoft.reef.examples.nggroup.bgd.operatornames.*;
 import com.microsoft.reef.examples.nggroup.bgd.parameters.AllCommunicationGroup;
 import com.microsoft.reef.examples.nggroup.bgd.parameters.ProbabilityOfFailure;
 import com.microsoft.reef.examples.nggroup.bgd.utils.StepSizes;
@@ -27,9 +15,13 @@ import com.microsoft.reef.io.network.group.operators.Broadcast;
 import com.microsoft.reef.io.network.group.operators.Reduce;
 import com.microsoft.reef.io.network.nggroup.api.task.CommunicationGroupClient;
 import com.microsoft.reef.io.network.nggroup.api.task.GroupCommClient;
-import com.microsoft.reef.io.network.util.Pair;
-import com.microsoft.reef.task.Task;
-import com.microsoft.tang.annotations.Parameter;
+import org.apache.reef.io.network.util.Pair;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.task.Task;
+
+import javax.inject.Inject;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class SlaveTask implements Task {
 
@@ -141,7 +133,7 @@ public class SlaveTask implements Task {
 
   private Pair<Vector, Integer> lineSearchEvals() {
 
-    if (examples==null) {
+    if (examples == null) {
       loadData();
     }
 
@@ -174,7 +166,7 @@ public class SlaveTask implements Task {
 
   private Pair<Pair<Double, Integer>, Vector> computeLossAndGradient() {
 
-    if (examples==null) {
+    if (examples == null) {
       loadData();
     }
 

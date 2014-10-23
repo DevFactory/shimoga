@@ -3,25 +3,24 @@
  */
 package com.microsoft.reef.io.network.group.impl.operators.basic;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import com.microsoft.reef.exception.evaluator.NetworkException;
 import com.microsoft.reef.io.network.group.impl.GroupCommNetworkHandler;
 import com.microsoft.reef.io.network.group.impl.operators.basic.config.GroupParameters;
 import com.microsoft.reef.io.network.group.operators.AllGather;
 import com.microsoft.reef.io.network.group.operators.Broadcast;
 import com.microsoft.reef.io.network.group.operators.Gather;
-import com.microsoft.reef.io.network.impl.NetworkService;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
-import com.microsoft.reef.io.network.util.ListCodec;
-import com.microsoft.reef.io.network.util.Utils;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.IdentifierFactory;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.network.util.ListCodec;
+import org.apache.reef.io.network.util.Utils;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.IdentifierFactory;
+import org.apache.reef.wake.remote.Codec;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Implementation of {@link AllGather}
@@ -62,7 +61,7 @@ public class AllGatherOp<T> extends SenderReceiverBase implements AllGather<T> {
       final Identifier parent,
       final List<ComparableIdentifier> children) {
 
-    super(self,parent,children);
+    super(self, parent, children);
 
     this.gatherSender = gatherSender;
     this.gatherReceiver = gatherReceiver;

@@ -3,8 +3,8 @@
  */
 package com.microsoft.reef.io.network.group.operators;
 
-import com.microsoft.reef.io.network.exception.ParentDeadException;
-import com.microsoft.tang.annotations.Name;
+import org.apache.reef.io.network.exception.ParentDeadException;
+import org.apache.reef.tang.annotations.Name;
 
 public interface GroupCommOperator {
 

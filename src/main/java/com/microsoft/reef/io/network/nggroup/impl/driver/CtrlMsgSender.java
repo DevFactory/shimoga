@@ -3,15 +3,16 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.driver;
 
-import java.util.logging.Logger;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
-import com.microsoft.reef.io.network.Connection;
-import com.microsoft.reef.io.network.impl.NetworkService;
 import com.microsoft.reef.io.network.nggroup.impl.GroupCommunicationMessage;
-import com.microsoft.wake.EventHandler;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.IdentifierFactory;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.Connection;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.wake.EventHandler;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.IdentifierFactory;
+
+import java.util.logging.Logger;
 
 /**
  * Event handler that receives ctrl msgs and
@@ -23,13 +24,13 @@ public class CtrlMsgSender implements EventHandler<GroupCommunicationMessage> {
   private final IdentifierFactory idFac;
   private final NetworkService<GroupCommunicationMessage> netService;
 
-  public CtrlMsgSender (final IdentifierFactory idFac, final NetworkService<GroupCommunicationMessage> netService) {
+  public CtrlMsgSender(final IdentifierFactory idFac, final NetworkService<GroupCommunicationMessage> netService) {
     this.idFac = idFac;
     this.netService = netService;
   }
 
   @Override
-  public void onNext (final GroupCommunicationMessage srcCtrlMsg) {
+  public void onNext(final GroupCommunicationMessage srcCtrlMsg) {
     LOG.entering("CtrlMsgSender", "onNext", srcCtrlMsg);
     final Identifier id = idFac.getNewInstance(srcCtrlMsg.getDestid());
     final Connection<GroupCommunicationMessage> link = netService.newConnection(id);

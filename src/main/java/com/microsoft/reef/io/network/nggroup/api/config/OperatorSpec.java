@@ -3,9 +3,9 @@
  */
 package com.microsoft.reef.io.network.nggroup.api.config;
 
-import com.microsoft.reef.annotations.audience.DriverSide;
-import com.microsoft.reef.annotations.audience.Private;
-import com.microsoft.reef.io.serialization.Codec;
+import org.apache.reef.annotations.audience.DriverSide;
+import org.apache.reef.annotations.audience.Private;
+import org.apache.reef.io.serialization.Codec;
 
 /**
  * The specification of an operator submitted by
@@ -18,9 +18,9 @@ public interface OperatorSpec {
 
   /**
    * @return The codec class to be used to
-   *         serialize & desrialize data in
-   *         the operators
+   * serialize & desrialize data in
+   * the operators
    */
-  Class<? extends Codec> getDataCodecClass ();
+  Class<? extends Codec> getDataCodecClass();
 
 }

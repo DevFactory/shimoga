@@ -3,8 +3,8 @@
  */
 package com.microsoft.reef.io.network.nggroup.api.task;
 
-import com.microsoft.reef.annotations.audience.Private;
-import com.microsoft.tang.annotations.DefaultImplementation;
+import org.apache.reef.annotations.audience.Private;
+import org.apache.reef.tang.annotations.DefaultImplementation;
 
 @Private
 @DefaultImplementation(value = com.microsoft.reef.io.network.nggroup.impl.task.CommunicationGroupClientImpl.class)

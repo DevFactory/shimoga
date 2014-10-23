@@ -3,36 +3,39 @@
  */
 package com.microsoft.reef.io.network.group.config;
 
-import com.microsoft.reef.driver.task.TaskConfigurationOptions;
-import com.microsoft.reef.exception.evaluator.NetworkException;
-import com.microsoft.reef.io.network.Connection;
-import com.microsoft.reef.io.network.Message;
 import com.microsoft.reef.io.network.group.impl.GCMCodec;
 import com.microsoft.reef.io.network.group.impl.GroupCommNetworkHandler;
 import com.microsoft.reef.io.network.group.impl.operators.faulty.AllReduceConfig;
 import com.microsoft.reef.io.network.group.impl.operators.faulty.AllReduceHandler;
 import com.microsoft.reef.io.network.group.impl.operators.faulty.ExceptionHandler;
 import com.microsoft.reef.io.network.group.operators.Reduce.ReduceFunction;
-import com.microsoft.reef.io.network.impl.MessagingTransportFactory;
-import com.microsoft.reef.io.network.impl.NetworkService;
-import com.microsoft.reef.io.network.impl.NetworkServiceParameters;
-import com.microsoft.reef.io.network.naming.NameServerParameters;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.reef.io.network.util.StringIdentifierFactory;
-import com.microsoft.reef.io.network.util.Utils;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.JavaConfigurationBuilder;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.exceptions.BindException;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.EventHandler;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.impl.LoggingEventHandler;
-import com.microsoft.wake.impl.SingleThreadStage;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.driver.task.TaskConfigurationOptions;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.Connection;
+import org.apache.reef.io.network.Message;
+import org.apache.reef.io.network.impl.MessagingTransportFactory;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.network.impl.NetworkServiceParameters;
+import org.apache.reef.io.network.naming.NameServerParameters;
+import org.apache.reef.io.network.util.StringIdentifierFactory;
+import org.apache.reef.io.network.util.Utils;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.JavaConfigurationBuilder;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.exceptions.BindException;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.EventHandler;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.impl.LoggingEventHandler;
+import org.apache.reef.wake.impl.SingleThreadStage;
+import org.apache.reef.wake.remote.Codec;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -98,14 +101,14 @@ public class AllReduceManager<T> {
     this.runningTasks = this.numTasks;
 
     this.allRedBaseConf = tang.newConfigurationBuilder()
-      .bindNamedParameter(AllReduceConfig.DataCodec.class, this.dataCodecClass)
-      .bindNamedParameter(AllReduceConfig.ReduceFunction.class, this.redFuncClass)
-      .bindNamedParameter(NetworkServiceParameters.NetworkServiceCodec.class, GCMCodec.class)
-      .bindNamedParameter(NetworkServiceParameters.NetworkServiceHandler.class, AllReduceHandler.class)
-      .bindNamedParameter(NetworkServiceParameters.NetworkServiceExceptionHandler.class, ExceptionHandler.class)
-      .bindNamedParameter(NameServerParameters.NameServerAddr.class, nameServiceAddr)
-      .bindNamedParameter(NameServerParameters.NameServerPort.class, Integer.toString(nameServicePort))
-      .build();
+        .bindNamedParameter(AllReduceConfig.DataCodec.class, this.dataCodecClass)
+        .bindNamedParameter(AllReduceConfig.ReduceFunction.class, this.redFuncClass)
+        .bindNamedParameter(NetworkServiceParameters.NetworkServiceCodec.class, GCMCodec.class)
+        .bindNamedParameter(NetworkServiceParameters.NetworkServiceHandler.class, AllReduceHandler.class)
+        .bindNamedParameter(NetworkServiceParameters.NetworkServiceExceptionHandler.class, ExceptionHandler.class)
+        .bindNamedParameter(NameServerParameters.NameServerAddr.class, nameServiceAddr)
+        .bindNamedParameter(NameServerParameters.NameServerPort.class, Integer.toString(nameServicePort))
+        .build();
 
     this.ns = new NetworkService<>(
         this.idFac, 0, nameServiceAddr, nameServicePort, new GCMCodec(),
@@ -156,20 +159,20 @@ public class AllReduceManager<T> {
     final ComparableIdentifier to = this.tasks[parent(this.taskIdMap.get(failedTaskId))];
 
     final SingleThreadStage<GroupCommMessage> senderStage =
-          new SingleThreadStage<>("SrcDeadMsgSender", new EventHandler<GroupCommMessage>() {
-      @Override
-      public void onNext(final GroupCommMessage srcDeadMsg) {
-        final Connection<GroupCommMessage> link = ns.newConnection(to);
-        try {
-          link.open();
-          LOG.log(Level.FINEST, "Sending source dead msg {0} to parent {1}", new Object[] { srcDeadMsg, to });
-          link.write(srcDeadMsg);
-        } catch (final NetworkException e) {
-          LOG.log(Level.WARNING, "Unable to send failed task msg to parent: " + to, e);
-          throw new RuntimeException("Unable to send failed task msg to parent: " + to, e);
-        }
-      }
-    }, 5);
+        new SingleThreadStage<>("SrcDeadMsgSender", new EventHandler<GroupCommMessage>() {
+          @Override
+          public void onNext(final GroupCommMessage srcDeadMsg) {
+            final Connection<GroupCommMessage> link = ns.newConnection(to);
+            try {
+              link.open();
+              LOG.log(Level.FINEST, "Sending source dead msg {0} to parent {1}", new Object[]{srcDeadMsg, to});
+              link.write(srcDeadMsg);
+            } catch (final NetworkException e) {
+              LOG.log(Level.WARNING, "Unable to send failed task msg to parent: " + to, e);
+              throw new RuntimeException("Unable to send failed task msg to parent: " + to, e);
+            }
+          }
+        }, 5);
 
     final GroupCommMessage srcDeadMsg = Utils.bldGCM(Type.SourceDead, from, to, new byte[0]);
     senderStage.onNext(srcDeadMsg);

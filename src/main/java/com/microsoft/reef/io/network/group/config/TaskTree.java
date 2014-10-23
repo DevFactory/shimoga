@@ -3,9 +3,9 @@
  */
 package com.microsoft.reef.io.network.group.config;
 
-import java.util.List;
+import org.apache.reef.wake.ComparableIdentifier;
 
-import com.microsoft.wake.ComparableIdentifier;
+import java.util.List;
 
 public interface TaskTree {
 

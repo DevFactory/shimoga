@@ -3,13 +3,13 @@
  */
 package com.microsoft.reef.io.network.nggroup.api.task;
 
-import com.microsoft.reef.annotations.audience.TaskSide;
-import com.microsoft.reef.io.network.Message;
 import com.microsoft.reef.io.network.nggroup.impl.GroupCommunicationMessage;
 import com.microsoft.reef.io.network.nggroup.impl.task.GroupCommNetworkHandlerImpl;
-import com.microsoft.tang.annotations.DefaultImplementation;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.wake.EventHandler;
+import org.apache.reef.annotations.audience.TaskSide;
+import org.apache.reef.io.network.Message;
+import org.apache.reef.tang.annotations.DefaultImplementation;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.wake.EventHandler;
 
 /**
  * The global EventHandler that receives the GroupCommunicationMsg

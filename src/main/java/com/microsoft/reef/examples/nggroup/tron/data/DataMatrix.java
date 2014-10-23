@@ -1,42 +1,25 @@
-/*
- * Copyright 2013 Microsoft.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/**
+ * Copyright (C) 2014 Microsoft Corporation
  */
 package com.microsoft.reef.examples.nggroup.tron.data;
 
+import com.microsoft.reef.examples.nggroup.tron.data.parser.FeatureParser;
+import com.microsoft.reef.examples.nggroup.tron.data.parser.SVMLightParser;
+import com.microsoft.reef.examples.nggroup.tron.math.DenseVector;
+import com.microsoft.reef.examples.nggroup.tron.math.Vector;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.reef.io.data.loading.api.DataSet;
+import org.apache.reef.io.network.util.Pair;
+import org.apache.reef.wake.EventHandler;
+import org.apache.reef.wake.impl.ThreadPoolStage;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
-
-import com.microsoft.reef.examples.nggroup.tron.data.Example;
-import com.microsoft.reef.examples.nggroup.tron.data.parser.FeatureParser;
-import com.microsoft.reef.examples.nggroup.tron.data.parser.Parser;
-import com.microsoft.reef.examples.nggroup.tron.data.parser.SVMLightParser;
-import com.microsoft.reef.examples.nggroup.tron.math.DenseVector;
-import com.microsoft.reef.examples.nggroup.tron.math.Vector;
-import com.microsoft.reef.io.data.loading.api.DataSet;
-import com.microsoft.reef.io.network.util.Pair;
-import com.microsoft.wake.EventHandler;
-import com.microsoft.wake.impl.ThreadPoolStage;
 
 /**
  * Useful for batch operations in linear solvers
@@ -58,12 +41,12 @@ public class DataMatrix implements com.microsoft.reef.examples.nggroup.tron.data
   private final DataSet<LongWritable, Text> dataSet;
 
   @Inject
-  public DataMatrix (final DataSet<LongWritable, Text> dataSet, final FeatureParser<String> parser) {
+  public DataMatrix(final DataSet<LongWritable, Text> dataSet, final FeatureParser<String> parser) {
     this.dataSet = dataSet;
     this.parser = parser;
   }
 
-  private void loadData () {
+  private void loadData() {
     LOG.info("Loading data");
     int i = 0;
     for (final Pair<LongWritable, Text> examplePair : dataSet) {
@@ -76,41 +59,41 @@ public class DataMatrix implements com.microsoft.reef.examples.nggroup.tron.data
   }
 
   @Override
-  public Iterator<Example> iterator () {
-    if(examples.isEmpty()) {
+  public Iterator<Example> iterator() {
+    if (examples.isEmpty()) {
       loadData();
     }
     return examples.iterator();
   }
 
   @Override
-  public int getNumberOfExamples () {
-    if(examples.isEmpty()) {
+  public int getNumberOfExamples() {
+    if (examples.isEmpty()) {
       loadData();
     }
     return examples.size();
   }
 
   public int getDimensionality() {
-    if(examples.isEmpty()) {
+    if (examples.isEmpty()) {
       loadData();
     }
     return parser.getDimensionality();
   }
 
   public void times(final Vector vector, final Vector result) {
-    if(examples.isEmpty()) {
+    if (examples.isEmpty()) {
       loadData();
     }
     final int numberOfExamples = getNumberOfExamples();
-    assert(result.size()==numberOfExamples);
-    assert(vector.size()==getDimensionality());
+    assert (result.size() == numberOfExamples);
+    assert (vector.size() == getDimensionality());
     final CountDownLatch latch = new CountDownLatch(NUM_THREADS);
-    final EventHandler<Pair<Integer, Integer>> timesHandler = new EventHandler<Pair<Integer,Integer>>() {
+    final EventHandler<Pair<Integer, Integer>> timesHandler = new EventHandler<Pair<Integer, Integer>>() {
 
       @Override
-      public void onNext (final Pair<Integer, Integer> range) {
-        for (int i=range.first; i<range.second; i++) {
+      public void onNext(final Pair<Integer, Integer> range) {
+        for (int i = range.first; i < range.second; i++) {
           final Example ex = examples.get(i);
           result.set(i, ex.predict(vector));
 //          System.out.println(Thread.currentThread().getName() + ": i=" + i + ", res=" + ex.predict(vector));
@@ -131,19 +114,19 @@ public class DataMatrix implements com.microsoft.reef.examples.nggroup.tron.data
   }
 
   public void transposeTimes(final Vector vector, final Vector result) {
-    assert(result.size()==getDimensionality());
-    assert(vector.size()==getNumberOfExamples());
-    if(examples.isEmpty()) {
+    assert (result.size() == getDimensionality());
+    assert (vector.size() == getNumberOfExamples());
+    if (examples.isEmpty()) {
       loadData();
     }
     final CountDownLatch latch = new CountDownLatch(NUM_THREADS);
     final Object resultLock = new Object();
-    final EventHandler<Pair<Integer, Integer>> transposeTimesHandler = new EventHandler<Pair<Integer,Integer>>() {
+    final EventHandler<Pair<Integer, Integer>> transposeTimesHandler = new EventHandler<Pair<Integer, Integer>>() {
 
       @Override
-      public void onNext (final Pair<Integer, Integer> range) {
+      public void onNext(final Pair<Integer, Integer> range) {
         final Vector intResult = result.newInstance();
-        for (int i=range.first; i<range.second; i++) {
+        for (int i = range.first; i < range.second; i++) {
           final Example ex = examples.get(i);
           ex.addToVector(intResult, vector.get(i));
 //          System.out.println(Thread.currentThread().getName() + ": i=" + i + ", intRes=" + intResult);
@@ -165,35 +148,35 @@ public class DataMatrix implements com.microsoft.reef.examples.nggroup.tron.data
     }
   }
 
-  private void distributeEvenly (final int numberOfExamples, final int numThreads, final EventHandler<Pair<Integer, Integer>> timesHandler, final ThreadPoolStage<Pair<Integer,Integer>> stage) {
-    final int stepSize = numberOfExamples/numThreads;
+  private void distributeEvenly(final int numberOfExamples, final int numThreads, final EventHandler<Pair<Integer, Integer>> timesHandler, final ThreadPoolStage<Pair<Integer, Integer>> stage) {
+    final int stepSize = numberOfExamples / numThreads;
     final int remainder = numberOfExamples % numThreads;
     int offset = 0;
-    for(int i=0; i<remainder; i++) {
+    for (int i = 0; i < remainder; i++) {
       stage.onNext(new Pair<>(offset, offset + stepSize + 1));
       offset += stepSize + 1;
     }
 
-    for(int i=remainder; i<numThreads; i++) {
+    for (int i = remainder; i < numThreads; i++) {
       stage.onNext(new Pair<>(offset, offset + stepSize));
       offset += stepSize;
     }
   }
 
-  public static void main (final String[] args) {
+  public static void main(final String[] args) {
     final ExampleDataSet ds = new ExampleDataSet();
     final DataMatrix X = new DataMatrix(ds, new SVMLightParser());
     final int dim = X.getDimensionality();
-    assert(dim==3);
+    assert (dim == 3);
     System.out.println("Dimensions: " + dim);
     final int numEx = X.getNumberOfExamples();
-    assert(numEx==10);
+    assert (numEx == 10);
     System.out.println("#Examples: " + numEx);
-    final DenseVector vector = new DenseVector(new double[] { 1, 1, 1 });
+    final DenseVector vector = new DenseVector(new double[]{1, 1, 1});
     final DenseVector result = new DenseVector(numEx);
     X.times(vector, result);
     System.out.println(result);
-    final DenseVector tVector = new DenseVector(new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 });
+    final DenseVector tVector = new DenseVector(new double[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1});
     final DenseVector tResult = new DenseVector(dim);
     X.transposeTimes(tVector, tResult);
     System.out.println(tResult);
@@ -217,7 +200,7 @@ class ExampleDataSet implements DataSet<LongWritable, Text> {
    * 4 0 5
    * 2 3 4
    */
-  public ExampleDataSet () {
+  public ExampleDataSet() {
     final LongWritable l = new LongWritable(0);
     data.add(new Pair<>(l, new Text("1 1:2")));
     data.add(new Pair<>(l, new Text("1 2:3")));
@@ -232,7 +215,7 @@ class ExampleDataSet implements DataSet<LongWritable, Text> {
   }
 
   @Override
-  public Iterator<Pair<LongWritable, Text>> iterator () {
+  public Iterator<Pair<LongWritable, Text>> iterator() {
     return data.iterator();
   }
 

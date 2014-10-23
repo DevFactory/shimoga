@@ -3,14 +3,15 @@
  */
 package com.microsoft.reef.io.network.nggroup.api.driver;
 
-import com.microsoft.reef.annotations.Provided;
-import com.microsoft.reef.annotations.audience.Private;
-import com.microsoft.reef.driver.evaluator.FailedEvaluator;
-import com.microsoft.reef.driver.task.FailedTask;
-import com.microsoft.reef.driver.task.RunningTask;
+
 import com.microsoft.reef.io.network.nggroup.impl.driver.GroupCommDriverImpl;
-import com.microsoft.tang.annotations.DefaultImplementation;
-import com.microsoft.wake.EStage;
+import org.apache.reef.annotations.Provided;
+import org.apache.reef.annotations.audience.Private;
+import org.apache.reef.driver.evaluator.FailedEvaluator;
+import org.apache.reef.driver.task.FailedTask;
+import org.apache.reef.driver.task.RunningTask;
+import org.apache.reef.tang.annotations.DefaultImplementation;
+import org.apache.reef.wake.EStage;
 
 @Private
 @Provided
@@ -21,7 +22,7 @@ public interface GroupCommServiceDriver extends GroupCommDriver {
    * Not user facing but used the Group Communication Service class
    *
    * @return The running task stage that will handle the RunningTask
-   *         events
+   * events
    */
   EStage<RunningTask> getGroupCommRunningTaskStage();
 
@@ -29,7 +30,7 @@ public interface GroupCommServiceDriver extends GroupCommDriver {
    * Not user facing but used the Group Communication Service class
    *
    * @return The running task stage that will handle the FailedTask
-   *         events
+   * events
    */
   EStage<FailedTask> getGroupCommFailedTaskStage();
 
@@ -37,7 +38,7 @@ public interface GroupCommServiceDriver extends GroupCommDriver {
    * Not user facing but used the Group Communication Service class
    *
    * @return The running task stage that will handle the FailedEvaluator
-   *         events
+   * events
    */
   EStage<FailedEvaluator> getGroupCommFailedEvaluatorStage();
 }

@@ -3,18 +3,18 @@
  */
 package com.microsoft.reef.io.network.group.impl.operators.faulty;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
-import com.microsoft.reef.io.network.Message;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupMessageBody;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.tang.annotations.NamedParameter;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.wake.EventHandler;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.IdentifierFactory;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.Message;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.tang.annotations.NamedParameter;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.wake.EventHandler;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.IdentifierFactory;
+import org.apache.reef.wake.remote.Codec;
 
 import javax.inject.Inject;
 import java.util.Set;
@@ -54,7 +54,7 @@ public class AllReduceHandler implements EventHandler<Message<GroupCommMessage>>
     final GroupCommMessage oneVal = value.getData().iterator().next();
     final Identifier srcId = this.idFac.getNewInstance(oneVal.getSrcid());
     try {
-      LOG.log(Level.FINEST, "Message {0} from: {1}", new Object[] { oneVal, srcId });
+      LOG.log(Level.FINEST, "Message {0} from: {1}", new Object[]{oneVal, srcId});
       this.id2que.get(srcId).put(oneVal);
     } catch (final InterruptedException e) {
       final String msg = "Could not put " + oneVal + " into the queue of " + srcId;

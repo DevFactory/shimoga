@@ -3,8 +3,8 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.driver;
 
-import com.microsoft.reef.driver.task.RunningTask;
-import com.microsoft.wake.EventHandler;
+import org.apache.reef.driver.task.RunningTask;
+import org.apache.reef.wake.EventHandler;
 
 import java.util.logging.Logger;
 
@@ -14,12 +14,12 @@ public class TopologyRunningTaskHandler implements EventHandler<RunningTask> {
 
   private final CommunicationGroupDriverImpl communicationGroupDriverImpl;
 
-  public TopologyRunningTaskHandler (final CommunicationGroupDriverImpl communicationGroupDriverImpl) {
+  public TopologyRunningTaskHandler(final CommunicationGroupDriverImpl communicationGroupDriverImpl) {
     this.communicationGroupDriverImpl = communicationGroupDriverImpl;
   }
 
   @Override
-  public void onNext (final RunningTask runningTask) {
+  public void onNext(final RunningTask runningTask) {
     final String runningTaskId = runningTask.getId();
     LOG.entering("TopologyRunningTaskHandler", "onNext", runningTaskId);
     communicationGroupDriverImpl.runTask(runningTaskId);

@@ -12,7 +12,7 @@ import com.microsoft.reef.io.network.group.operators.Broadcast;
 import com.microsoft.reef.io.network.group.operators.Reduce;
 import com.microsoft.reef.io.network.nggroup.api.task.CommunicationGroupClient;
 import com.microsoft.reef.io.network.nggroup.api.task.GroupCommClient;
-import com.microsoft.reef.task.Task;
+import org.apache.reef.task.Task;
 
 import javax.inject.Inject;
 

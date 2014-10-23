@@ -3,15 +3,15 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl;
 
-import javax.inject.Inject;
-
 import com.microsoft.reef.io.network.nggroup.api.GroupChanges;
-import com.microsoft.reef.io.serialization.Codec;
+import org.apache.reef.io.serialization.Codec;
+
+import javax.inject.Inject;
 
 public class GroupChangesCodec implements Codec<GroupChanges> {
 
   @Inject
-  public GroupChangesCodec () {
+  public GroupChangesCodec() {
   }
 
   @Override

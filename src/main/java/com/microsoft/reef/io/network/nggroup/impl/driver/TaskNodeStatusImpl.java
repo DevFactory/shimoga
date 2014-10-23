@@ -3,11 +3,6 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.driver;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Logger;
-
 import com.microsoft.reef.io.network.nggroup.api.driver.TaskNode;
 import com.microsoft.reef.io.network.nggroup.api.driver.TaskNodeStatus;
 import com.microsoft.reef.io.network.nggroup.impl.GroupCommunicationMessage;
@@ -15,7 +10,12 @@ import com.microsoft.reef.io.network.nggroup.impl.utils.ConcurrentCountingMap;
 import com.microsoft.reef.io.network.nggroup.impl.utils.CountingMap;
 import com.microsoft.reef.io.network.nggroup.impl.utils.Utils;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.tang.annotations.Name;
+import org.apache.reef.tang.annotations.Name;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 public class TaskNodeStatusImpl implements TaskNodeStatus {
 
@@ -32,63 +32,63 @@ public class TaskNodeStatusImpl implements TaskNodeStatus {
   private final Object topoSetupSentLock = new Object();
   private final TaskNode node;
 
-  public TaskNodeStatusImpl (final Class<? extends Name<String>> groupName,
-                             final Class<? extends Name<String>> operName, final String taskId, final TaskNode node) {
+  public TaskNodeStatusImpl(final Class<? extends Name<String>> groupName,
+                            final Class<? extends Name<String>> operName, final String taskId, final TaskNode node) {
     this.groupName = groupName;
     this.operName = operName;
     this.taskId = taskId;
     this.node = node;
   }
 
-  private boolean isDeadMsg (final Type msgAcked) {
+  private boolean isDeadMsg(final Type msgAcked) {
     return msgAcked == Type.ParentDead || msgAcked == Type.ChildDead;
   }
 
-  private boolean isAddMsg (final Type msgAcked) {
+  private boolean isAddMsg(final Type msgAcked) {
     return msgAcked == Type.ParentAdd || msgAcked == Type.ChildAdd;
   }
 
-  private Type getAckedMsg (final Type msgType) {
+  private Type getAckedMsg(final Type msgType) {
     switch (msgType) {
-    case ParentAdded:
-      return Type.ParentAdd;
-    case ChildAdded:
-      return Type.ChildAdd;
-    case ParentRemoved:
-      return Type.ParentDead;
-    case ChildRemoved:
-      return Type.ChildDead;
-    default:
-      return msgType;
+      case ParentAdded:
+        return Type.ParentAdd;
+      case ChildAdded:
+        return Type.ChildAdd;
+      case ParentRemoved:
+        return Type.ParentDead;
+      case ChildRemoved:
+        return Type.ChildDead;
+      default:
+        return msgType;
     }
   }
 
-  private void chkIamActiveToSendTopoSetup (final Type msgDealt) {
-    LOG.entering("TaskNodeStatusImpl", "chkAndSendTopoSetup", new Object[] { getQualifiedName(), msgDealt });
+  private void chkIamActiveToSendTopoSetup(final Type msgDealt) {
+    LOG.entering("TaskNodeStatusImpl", "chkAndSendTopoSetup", new Object[]{getQualifiedName(), msgDealt});
     if (statusMap.isEmpty()) {
       LOG.finest(getQualifiedName() + "Empty status map.");
       node.checkAndSendTopologySetupMessage();
     } else {
       LOG.finest(getQualifiedName() + "Status map non-empty" + statusMap);
     }
-    LOG.exiting("TaskNodeStatusImpl","chkAndSendTopoSetup",getQualifiedName() + msgDealt);
+    LOG.exiting("TaskNodeStatusImpl", "chkAndSendTopoSetup", getQualifiedName() + msgDealt);
   }
 
   @Override
-  public void onTopologySetupMessageSent () {
+  public void onTopologySetupMessageSent() {
     LOG.entering("TaskNodeStatusImpl", "onTopologySetupMessageSent", getQualifiedName());
     neighborStatus.clear();
     synchronized (topoSetupSentLock) {
       topoSetupSentLock.notifyAll();
     }
-    LOG.exiting("TaskNodeStatusImpl","onTopologySetupMessageSent",getQualifiedName());
+    LOG.exiting("TaskNodeStatusImpl", "onTopologySetupMessageSent", getQualifiedName());
   }
 
   @Override
-  public boolean isActive (final String neighborId) {
-    LOG.entering("TaskNodeStatusImpl", "isActive", new Object[] { getQualifiedName(), neighborId });
+  public boolean isActive(final String neighborId) {
+    LOG.entering("TaskNodeStatusImpl", "isActive", new Object[]{getQualifiedName(), neighborId});
     final boolean contains = activeNeighbors.contains(neighborId);
-    LOG.exiting("TaskNodeStatusImpl","isActive",getQualifiedName() + contains);
+    LOG.exiting("TaskNodeStatusImpl", "isActive", getQualifiedName() + contains);
     return contains;
   }
 
@@ -98,15 +98,15 @@ public class TaskNodeStatusImpl implements TaskNodeStatus {
    * nodes.(Acks & Topology msgs)
    */
   @Override
-  public void expectAckFor (final Type msgType, final String srcId) {
-    LOG.entering("TaskNodeStatusImpl", "expectAckFor", new Object[] { getQualifiedName(), msgType, srcId });
+  public void expectAckFor(final Type msgType, final String srcId) {
+    LOG.entering("TaskNodeStatusImpl", "expectAckFor", new Object[]{getQualifiedName(), msgType, srcId});
     LOG.finest(getQualifiedName() + "Adding " + srcId + " to sources");
     statusMap.add(msgType, srcId);
     LOG.exiting("TaskNodeStatusImpl", "expectAckFor", getQualifiedName() + "Sources from which ACKs for " + msgType + " are expected: " + statusMap.get(msgType));
   }
 
   @Override
-  public void clearStateAndReleaseLocks () {
+  public void clearStateAndReleaseLocks() {
     LOG.entering("TaskNodeStatusImpl", "clearStateAndReleaseLocks", getQualifiedName());
     statusMap.clear();
     activeNeighbors.clear();
@@ -118,49 +118,49 @@ public class TaskNodeStatusImpl implements TaskNodeStatus {
     synchronized (topoUpdateStageLock) {
       topoUpdateStageLock.notifyAll();
     }
-    LOG.exiting("TaskNodeStatusImpl","clearStateAndReleaseLocks",getQualifiedName());
+    LOG.exiting("TaskNodeStatusImpl", "clearStateAndReleaseLocks", getQualifiedName());
   }
 
   @Override
-  public void updateFailureOf (final String taskId) {
-    LOG.entering("TaskNodeStatusImpl", "updateFailureOf", new Object[] { getQualifiedName(), taskId });
+  public void updateFailureOf(final String taskId) {
+    LOG.entering("TaskNodeStatusImpl", "updateFailureOf", new Object[]{getQualifiedName(), taskId});
     activeNeighbors.remove(taskId);
     neighborStatus.remove(taskId);
-    LOG.exiting("TaskNodeStatusImpl","updateFailureOf",getQualifiedName());
+    LOG.exiting("TaskNodeStatusImpl", "updateFailureOf", getQualifiedName());
   }
 
   @Override
-  public void processAcknowledgement (final GroupCommunicationMessage gcm) {
-    LOG.entering("TaskNodeStatusImpl", "processMsg", new Object[] { getQualifiedName(), gcm });
+  public void processAcknowledgement(final GroupCommunicationMessage gcm) {
+    LOG.entering("TaskNodeStatusImpl", "processMsg", new Object[]{getQualifiedName(), gcm});
     final String self = gcm.getSrcid();
     final Type msgType = gcm.getType();
     final Type msgAcked = getAckedMsg(msgType);
     final String sourceId = gcm.getDestid();
     switch (msgType) {
-    case TopologySetup:
-      synchronized (topoUpdateStageLock) {
-        if (!updatingTopo.compareAndSet(true, false)) {
-          LOG.fine(getQualifiedName() + "Was expecting updateTopo to be true but it was false");
+      case TopologySetup:
+        synchronized (topoUpdateStageLock) {
+          if (!updatingTopo.compareAndSet(true, false)) {
+            LOG.fine(getQualifiedName() + "Was expecting updateTopo to be true but it was false");
+          }
+          topoUpdateStageLock.notifyAll();
         }
-        topoUpdateStageLock.notifyAll();
-      }
-      break;
-    case ParentAdded:
-    case ChildAdded:
-    case ParentRemoved:
-    case ChildRemoved:
-      processNeighborAcks(gcm, msgType, msgAcked, sourceId);
-      break;
+        break;
+      case ParentAdded:
+      case ChildAdded:
+      case ParentRemoved:
+      case ChildRemoved:
+        processNeighborAcks(gcm, msgType, msgAcked, sourceId);
+        break;
 
-    default:
-      LOG.fine(getQualifiedName() + "Non ACK msg " + gcm.getType() + " for " + gcm.getDestid() + " unexpected");
-      break;
+      default:
+        LOG.fine(getQualifiedName() + "Non ACK msg " + gcm.getType() + " for " + gcm.getDestid() + " unexpected");
+        break;
     }
     LOG.exiting("TaskNodeStatusImpl", "processMsg", getQualifiedName());
   }
 
-  private void processNeighborAcks (final GroupCommunicationMessage gcm, final Type msgType, final Type msgAcked,
-                          final String sourceId) {
+  private void processNeighborAcks(final GroupCommunicationMessage gcm, final Type msgType, final Type msgAcked,
+                                   final String sourceId) {
     LOG.entering("TaskNodeStatusImpl", "processNeighborAcks", getQualifiedName() + gcm);
     if (statusMap.containsKey(msgAcked)) {
       if (statusMap.contains(msgAcked, sourceId)) {
@@ -170,20 +170,20 @@ public class TaskNodeStatusImpl implements TaskNodeStatus {
         chkIamActiveToSendTopoSetup(msgAcked);
       } else {
         LOG.fine(getQualifiedName() + "NodeStatusMsgProcessorStage Got " + msgType + " from a source(" + sourceId
-                    + ") to whom ChildAdd was not sent. "
-                    + "Perhaps reset during failure. If context not indicative use ***CAUTION***");
+            + ") to whom ChildAdd was not sent. "
+            + "Perhaps reset during failure. If context not indicative use ***CAUTION***");
       }
     } else {
       LOG.fine(getQualifiedName() + "NodeStatusMsgProcessorStage There were no " + msgAcked
-                  + " msgs sent in the previous update cycle. "
-                  + "Perhaps reset during failure. If context not indicative use ***CAUTION***");
+          + " msgs sent in the previous update cycle. "
+          + "Perhaps reset during failure. If context not indicative use ***CAUTION***");
     }
     LOG.exiting("TaskNodeStatusImpl", "processNeighborAcks", getQualifiedName() + gcm);
   }
 
-  private void checkNeighborActiveToSendTopoSetup (final String sourceId) {
-    LOG.entering("TaskNodeStatusImpl", "checkNeighborActiveToSendTopoSetup", new Object[] { getQualifiedName(),
-                                                                                           sourceId });
+  private void checkNeighborActiveToSendTopoSetup(final String sourceId) {
+    LOG.entering("TaskNodeStatusImpl", "checkNeighborActiveToSendTopoSetup", new Object[]{getQualifiedName(),
+        sourceId});
     if (statusMap.notContains(sourceId)) {
       //All msgs corresponding to sourceId have been ACKed
       if (neighborStatus.get(sourceId) > 0) {
@@ -198,8 +198,8 @@ public class TaskNodeStatusImpl implements TaskNodeStatus {
     LOG.exiting("TaskNodeStatusImpl", "checkNeighborActiveToSendTopoSetup", getQualifiedName() + sourceId);
   }
 
-  private void updateNeighborStatus (final Type msgAcked, final String sourceId) {
-    LOG.entering("TaskNodeStatusImpl", "updateNeighborStatus", new Object[] { getQualifiedName(), msgAcked, sourceId });
+  private void updateNeighborStatus(final Type msgAcked, final String sourceId) {
+    LOG.entering("TaskNodeStatusImpl", "updateNeighborStatus", new Object[]{getQualifiedName(), msgAcked, sourceId});
     if (isAddMsg(msgAcked)) {
       neighborStatus.add(sourceId);
     } else if (isDeadMsg(msgAcked)) {
@@ -207,11 +207,11 @@ public class TaskNodeStatusImpl implements TaskNodeStatus {
     } else {
       throw new RuntimeException("Can only deal with Neigbor ACKs while I received " + msgAcked + " from " + sourceId);
     }
-    LOG.exiting("TaskNodeStatusImpl", "updateNeighborStatus", new Object[] { getQualifiedName(), msgAcked, sourceId });
+    LOG.exiting("TaskNodeStatusImpl", "updateNeighborStatus", new Object[]{getQualifiedName(), msgAcked, sourceId});
   }
 
   @Override
-  public void updatingTopology () {
+  public void updatingTopology() {
     LOG.entering("TaskNodeStatusImpl", "updatingTopology", getQualifiedName());
     final boolean topoBeingUpdated = !updatingTopo.compareAndSet(false, true);
     if (topoBeingUpdated) {
@@ -220,12 +220,12 @@ public class TaskNodeStatusImpl implements TaskNodeStatus {
     LOG.exiting("TaskNodeStatusImpl", "updatingTopology", getQualifiedName());
   }
 
-  private String getQualifiedName () {
+  private String getQualifiedName() {
     return Utils.simpleName(groupName) + ":" + Utils.simpleName(operName) + ":(" + taskId + "," + node.getVersion() + ") - ";
   }
 
   @Override
-  public boolean hasChanges () {
+  public boolean hasChanges() {
     LOG.entering("TaskNodeStatusImpl", "hasChanges", getQualifiedName());
     final boolean notEmpty = !statusMap.isEmpty();
     LOG.exiting("TaskNodeStatusImpl", "hasChanges", getQualifiedName() + notEmpty);
@@ -233,7 +233,7 @@ public class TaskNodeStatusImpl implements TaskNodeStatus {
   }
 
   @Override
-  public void waitForTopologySetup () {
+  public void waitForTopologySetup() {
     LOG.entering("TaskNodeStatusImpl", "waitForTopologySetup", getQualifiedName());
     LOG.finest("Waiting to acquire topoUpdateStageLock");
     synchronized (topoUpdateStageLock) {
@@ -244,7 +244,7 @@ public class TaskNodeStatusImpl implements TaskNodeStatus {
           topoUpdateStageLock.wait();
         } catch (final InterruptedException e) {
           throw new RuntimeException("InterruptedException in NodeTopologyUpdateWaitStage "
-                                     + "while waiting for receiving TopologySetup", e);
+              + "while waiting for receiving TopologySetup", e);
         }
       }
     }

@@ -5,9 +5,9 @@ package com.microsoft.reef.io.network.nggroup.api.task;
 
 import com.microsoft.reef.io.network.nggroup.impl.GroupCommunicationMessage;
 import com.microsoft.reef.io.network.nggroup.impl.task.CommGroupNetworkHandlerImpl;
-import com.microsoft.tang.annotations.DefaultImplementation;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.wake.EventHandler;
+import org.apache.reef.tang.annotations.DefaultImplementation;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.wake.EventHandler;
 
 /**
  * The EventHandler that receives the GroupCommunicationMsg

@@ -6,7 +6,7 @@ package com.microsoft.reef.examples.nggroup.bgd;
 import com.microsoft.reef.examples.nggroup.bgd.math.DenseVector;
 import com.microsoft.reef.examples.nggroup.bgd.math.Vector;
 import com.microsoft.reef.io.network.group.operators.Reduce.ReduceFunction;
-import com.microsoft.reef.io.network.util.Pair;
+import org.apache.reef.io.network.util.Pair;
 
 import javax.inject.Inject;
 

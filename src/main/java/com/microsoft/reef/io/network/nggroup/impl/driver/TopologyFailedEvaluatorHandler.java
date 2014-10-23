@@ -3,10 +3,10 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.driver;
 
-import java.util.logging.Logger;
+import org.apache.reef.driver.evaluator.FailedEvaluator;
+import org.apache.reef.wake.EventHandler;
 
-import com.microsoft.reef.driver.evaluator.FailedEvaluator;
-import com.microsoft.wake.EventHandler;
+import java.util.logging.Logger;
 
 public class TopologyFailedEvaluatorHandler implements EventHandler<FailedEvaluator> {
 
@@ -15,12 +15,12 @@ public class TopologyFailedEvaluatorHandler implements EventHandler<FailedEvalua
 
   private final CommunicationGroupDriverImpl communicationGroupDriverImpl;
 
-  public TopologyFailedEvaluatorHandler (final CommunicationGroupDriverImpl communicationGroupDriverImpl) {
+  public TopologyFailedEvaluatorHandler(final CommunicationGroupDriverImpl communicationGroupDriverImpl) {
     this.communicationGroupDriverImpl = communicationGroupDriverImpl;
   }
 
   @Override
-  public void onNext (final FailedEvaluator failedEvaluator) {
+  public void onNext(final FailedEvaluator failedEvaluator) {
     final String failedEvaluatorId = failedEvaluator.getId();
     LOG.entering("TopologyFailedEvaluatorHandler", "onNext", failedEvaluatorId);
     if (failedEvaluator.getFailedTask().isPresent()) {

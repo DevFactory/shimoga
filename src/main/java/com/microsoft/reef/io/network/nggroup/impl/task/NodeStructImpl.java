@@ -3,13 +3,13 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.task;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.Logger;
-
 import com.microsoft.reef.io.network.nggroup.api.task.NodeStruct;
 import com.microsoft.reef.io.network.nggroup.impl.GroupCommunicationMessage;
 import com.microsoft.reef.io.network.nggroup.impl.utils.Utils;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Logger;
 
 public abstract class NodeStructImpl implements NodeStruct {
 
@@ -20,36 +20,36 @@ public abstract class NodeStructImpl implements NodeStruct {
 
   private int version;
 
-  public NodeStructImpl (final String id, final int version) {
+  public NodeStructImpl(final String id, final int version) {
     super();
     this.id = id;
     this.version = version;
   }
 
   @Override
-  public int getVersion () {
+  public int getVersion() {
     return version;
   }
 
   @Override
-  public void setVersion (final int version) {
+  public void setVersion(final int version) {
     this.version = version;
   }
 
   @Override
-  public String getId () {
+  public String getId() {
     return id;
   }
 
   @Override
-  public void addData (final GroupCommunicationMessage msg) {
+  public void addData(final GroupCommunicationMessage msg) {
     LOG.entering("NodeStructImpl", "addData", msg);
     dataQue.add(msg);
     LOG.exiting("NodeStructImpl", "addData", msg);
   }
 
   @Override
-  public byte[] getData () {
+  public byte[] getData() {
     LOG.entering("NodeStructImpl", "getData");
     GroupCommunicationMessage gcm;
     try {
@@ -64,12 +64,12 @@ public abstract class NodeStructImpl implements NodeStruct {
   }
 
   @Override
-  public String toString () {
+  public String toString() {
     return "(" + id + "," + version + ")";
   }
 
   @Override
-  public boolean equals (final Object obj) {
+  public boolean equals(final Object obj) {
     if (obj instanceof NodeStructImpl) {
       final NodeStructImpl that = (NodeStructImpl) obj;
       return this.id.equals(that.id) && this.version == that.version;
@@ -78,6 +78,6 @@ public abstract class NodeStructImpl implements NodeStruct {
     }
   }
 
-  public abstract boolean checkDead (final GroupCommunicationMessage gcm);
+  public abstract boolean checkDead(final GroupCommunicationMessage gcm);
 
 }

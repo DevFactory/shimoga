@@ -3,12 +3,12 @@
  */
 package com.microsoft.reef.io.network.nggroup.api.task;
 
-import com.microsoft.reef.annotations.audience.TaskSide;
 import com.microsoft.reef.io.network.group.operators.Broadcast;
 import com.microsoft.reef.io.network.group.operators.Reduce;
 import com.microsoft.reef.io.network.nggroup.api.GroupChanges;
-import com.microsoft.tang.annotations.DefaultImplementation;
-import com.microsoft.tang.annotations.Name;
+import org.apache.reef.annotations.audience.TaskSide;
+import org.apache.reef.tang.annotations.DefaultImplementation;
+import org.apache.reef.tang.annotations.Name;
 
 /**
  * The Task side interface of a communication group
@@ -62,9 +62,8 @@ public interface CommunicationGroupClient {
   Reduce.Sender getReduceSender(Class<? extends Name<String>> operatorName);
 
   /**
-   *
    * @return Changes in topology of this communication group since the last time
-   *         this method was called
+   * this method was called
    */
   GroupChanges getTopologyChanges();
 

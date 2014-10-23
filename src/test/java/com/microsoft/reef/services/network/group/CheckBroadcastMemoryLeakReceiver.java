@@ -3,20 +3,20 @@
  */
 package com.microsoft.reef.services.network.group;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
 import com.microsoft.reef.io.network.group.impl.ExceptionHandler;
 import com.microsoft.reef.io.network.group.impl.GCMCodec;
 import com.microsoft.reef.io.network.group.impl.operators.faulty.*;
 import com.microsoft.reef.io.network.group.operators.Reduce.ReduceFunction;
-import com.microsoft.reef.io.network.impl.MessagingTransportFactory;
-import com.microsoft.reef.io.network.impl.NetworkService;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
-import com.microsoft.reef.io.network.util.StringIdentifierFactory;
-import com.microsoft.wake.EventHandler;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.IdentifierFactory;
-import com.microsoft.wake.remote.Codec;
-import com.microsoft.wake.remote.NetUtils;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.impl.MessagingTransportFactory;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.network.util.StringIdentifierFactory;
+import org.apache.reef.wake.EventHandler;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.IdentifierFactory;
+import org.apache.reef.wake.remote.Codec;
+import org.apache.reef.wake.remote.NetUtils;
 
 import java.util.Collections;
 import java.util.HashSet;

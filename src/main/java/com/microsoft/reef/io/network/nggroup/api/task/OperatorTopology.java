@@ -3,21 +3,21 @@
  */
 package com.microsoft.reef.io.network.nggroup.api.task;
 
-import com.microsoft.reef.io.network.exception.ParentDeadException;
 import com.microsoft.reef.io.network.group.operators.Reduce.ReduceFunction;
 import com.microsoft.reef.io.network.nggroup.impl.GroupCommunicationMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.reef.io.serialization.Codec;
+import org.apache.reef.io.network.exception.ParentDeadException;
+import org.apache.reef.io.serialization.Codec;
 
 /**
  * Represents the local topology of tasks for an operator. It
  * provides methods to send/rcv from parents & children
- *
+ * <p/>
  * Every operator is an EventHandler<GroupCommunicationMessage>
  * and it will use an instance of this type to delegate the
  * handling of the message and also uses it to communicate
  * with its parents and children
- *
+ * <p/>
  * This is an operator facing interface. The actual topology is
  * maintained in OperatorTopologyStruct. Current strategy is to
  * maintain two versions of the topology and current operations

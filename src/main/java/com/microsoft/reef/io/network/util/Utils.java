@@ -1,23 +1,22 @@
 /**
  * Copyright (C) 2014 Microsoft Corporation
  */
-package com.microsoft.reef.io.network.util;
+package org.apache.reef.io.network.util;
+
+import com.google.protobuf.ByteString;
+import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
+import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
+import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupMessageBody;
+import org.apache.commons.lang.StringUtils;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.IdentifierFactory;
 
 import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.google.protobuf.ByteString;
-import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
-import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupMessageBody;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.IdentifierFactory;
 
 public class Utils {
 

@@ -3,29 +3,11 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.task;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
-import com.microsoft.reef.driver.parameters.DriverIdentifier;
-import com.microsoft.reef.driver.task.TaskConfigurationOptions;
-import com.microsoft.reef.exception.evaluator.NetworkException;
 import com.microsoft.reef.io.network.group.operators.Broadcast;
 import com.microsoft.reef.io.network.group.operators.GroupCommOperator;
 import com.microsoft.reef.io.network.group.operators.Reduce;
-import com.microsoft.reef.io.network.impl.NetworkService;
 import com.microsoft.reef.io.network.nggroup.api.GroupChanges;
 import com.microsoft.reef.io.network.nggroup.api.task.CommGroupNetworkHandler;
-import com.microsoft.reef.io.network.nggroup.api.task.CommunicationGroupClient;
 import com.microsoft.reef.io.network.nggroup.api.task.CommunicationGroupServiceClient;
 import com.microsoft.reef.io.network.nggroup.api.task.GroupCommNetworkHandler;
 import com.microsoft.reef.io.network.nggroup.impl.GroupChangesCodec;
@@ -37,17 +19,28 @@ import com.microsoft.reef.io.network.nggroup.impl.config.parameters.SerializedOp
 import com.microsoft.reef.io.network.nggroup.impl.operators.Sender;
 import com.microsoft.reef.io.network.nggroup.impl.utils.Utils;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.reef.io.serialization.Codec;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.Injector;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.tang.exceptions.BindException;
-import com.microsoft.tang.exceptions.InjectionException;
-import com.microsoft.tang.formats.ConfigurationSerializer;
-import com.microsoft.wake.EStage;
-import com.microsoft.wake.impl.ThreadPoolStage;
+import org.apache.reef.driver.parameters.DriverIdentifier;
+import org.apache.reef.driver.task.TaskConfigurationOptions;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.serialization.Codec;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.Injector;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.tang.exceptions.BindException;
+import org.apache.reef.tang.exceptions.InjectionException;
+import org.apache.reef.tang.formats.ConfigurationSerializer;
+import org.apache.reef.wake.EStage;
+import org.apache.reef.wake.impl.ThreadPoolStage;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 public class CommunicationGroupClientImpl implements CommunicationGroupServiceClient {
   private static final Logger LOG = Logger.getLogger(CommunicationGroupClientImpl.class.getName());
@@ -66,13 +59,13 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
   private final AtomicBoolean init = new AtomicBoolean(false);
 
   @Inject
-  public CommunicationGroupClientImpl (@Parameter(CommunicationGroupName.class) final String groupName,
-                                       @Parameter(TaskConfigurationOptions.Identifier.class) final String taskId,
-                                       @Parameter(DriverIdentifier.class) final String driverId,
-                                       final GroupCommNetworkHandler groupCommNetworkHandler,
-                                       @Parameter(SerializedOperConfigs.class) final Set<String> operatorConfigs,
-                                       final ConfigurationSerializer configSerializer,
-                                       final NetworkService<GroupCommunicationMessage> netService) {
+  public CommunicationGroupClientImpl(@Parameter(CommunicationGroupName.class) final String groupName,
+                                      @Parameter(TaskConfigurationOptions.Identifier.class) final String taskId,
+                                      @Parameter(DriverIdentifier.class) final String driverId,
+                                      final GroupCommNetworkHandler groupCommNetworkHandler,
+                                      @Parameter(SerializedOperConfigs.class) final Set<String> operatorConfigs,
+                                      final ConfigurationSerializer configSerializer,
+                                      final NetworkService<GroupCommunicationMessage> netService) {
     this.taskId = taskId;
     this.driverId = driverId;
     LOG.finest(groupName + " has GroupCommHandler-" + groupCommNetworkHandler.toString());
@@ -82,7 +75,7 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
     this.operators = new TreeMap<>(new Comparator<Class<? extends Name<String>>>() {
 
       @Override
-      public int compare (final Class<? extends Name<String>> o1, final Class<? extends Name<String>> o2) {
+      public int compare(final Class<? extends Name<String>> o1, final Class<? extends Name<String>> o2) {
         final String s1 = o1.getSimpleName();
         final String s2 = o2.getSimpleName();
         return s1.compareTo(s2);
@@ -116,9 +109,9 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
   }
 
   @Override
-  public Broadcast.Sender getBroadcastSender (final Class<? extends Name<String>> operatorName) {
-    LOG.entering("CommunicationGroupClientImpl", "getBroadcastSender", new Object[] { getQualifiedName(),
-                                                                                     Utils.simpleName(operatorName) });
+  public Broadcast.Sender getBroadcastSender(final Class<? extends Name<String>> operatorName) {
+    LOG.entering("CommunicationGroupClientImpl", "getBroadcastSender", new Object[]{getQualifiedName(),
+        Utils.simpleName(operatorName)});
     final GroupCommOperator op = operators.get(operatorName);
     if (!(op instanceof Broadcast.Sender)) {
       throw new RuntimeException("Configured operator is not a broadcast sender");
@@ -129,9 +122,9 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
   }
 
   @Override
-  public Reduce.Receiver getReduceReceiver (final Class<? extends Name<String>> operatorName) {
-    LOG.entering("CommunicationGroupClientImpl", "getReduceReceiver", new Object[] { getQualifiedName(),
-                                                                                    Utils.simpleName(operatorName) });
+  public Reduce.Receiver getReduceReceiver(final Class<? extends Name<String>> operatorName) {
+    LOG.entering("CommunicationGroupClientImpl", "getReduceReceiver", new Object[]{getQualifiedName(),
+        Utils.simpleName(operatorName)});
     final GroupCommOperator op = operators.get(operatorName);
     if (!(op instanceof Reduce.Receiver)) {
       throw new RuntimeException("Configured operator is not a reduce receiver");
@@ -142,9 +135,9 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
   }
 
   @Override
-  public Broadcast.Receiver getBroadcastReceiver (final Class<? extends Name<String>> operatorName) {
-    LOG.entering("CommunicationGroupClientImpl", "getBroadcastReceiver", new Object[] { getQualifiedName(),
-                                                                                       Utils.simpleName(operatorName) });
+  public Broadcast.Receiver getBroadcastReceiver(final Class<? extends Name<String>> operatorName) {
+    LOG.entering("CommunicationGroupClientImpl", "getBroadcastReceiver", new Object[]{getQualifiedName(),
+        Utils.simpleName(operatorName)});
     final GroupCommOperator op = operators.get(operatorName);
     if (!(op instanceof Broadcast.Receiver)) {
       throw new RuntimeException("Configured operator is not a broadcast receiver");
@@ -155,9 +148,9 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
   }
 
   @Override
-  public Reduce.Sender getReduceSender (final Class<? extends Name<String>> operatorName) {
-    LOG.entering("CommunicationGroupClientImpl", "getReduceSender", new Object[] { getQualifiedName(),
-                                                                                  Utils.simpleName(operatorName) });
+  public Reduce.Sender getReduceSender(final Class<? extends Name<String>> operatorName) {
+    LOG.entering("CommunicationGroupClientImpl", "getReduceSender", new Object[]{getQualifiedName(),
+        Utils.simpleName(operatorName)});
     final GroupCommOperator op = operators.get(operatorName);
     if (!(op instanceof Reduce.Sender)) {
       throw new RuntimeException("Configured operator is not a reduce sender");
@@ -168,7 +161,7 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
   }
 
   @Override
-  public void initialize () {
+  public void initialize() {
     LOG.entering("CommunicationGroupClientImpl", "initialize", getQualifiedName());
     if (init.compareAndSet(false, true)) {
       LOG.finest("CommGroup-" + groupName + " is initializing");
@@ -194,14 +187,14 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
   }
 
   @Override
-  public GroupChanges getTopologyChanges () {
+  public GroupChanges getTopologyChanges() {
     LOG.entering("CommunicationGroupClientImpl", "getTopologyChanges", getQualifiedName());
     for (final GroupCommOperator op : operators.values()) {
       final Class<? extends Name<String>> operName = op.getOperName();
       LOG.finest("Sending TopologyChanges msg to driver");
       try {
         sender.send(Utils.bldVersionedGCM(groupName, operName, Type.TopologyChanges, taskId, op.getVersion(), driverId,
-                                          0, Utils.EmptyByteArr));
+            0, Utils.EmptyByteArr));
       } catch (final NetworkException e) {
         throw new RuntimeException("NetworkException while sending GetTopologyChanges", e);
       }
@@ -222,8 +215,8 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
    * @param perOpChanges
    * @return
    */
-  private GroupChanges mergeGroupChanges (final Map<Class<? extends Name<String>>, GroupChanges> perOpChanges) {
-    LOG.entering("CommunicationGroupClientImpl", "mergeGroupChanges", new Object[] { getQualifiedName(), perOpChanges });
+  private GroupChanges mergeGroupChanges(final Map<Class<? extends Name<String>>, GroupChanges> perOpChanges) {
+    LOG.entering("CommunicationGroupClientImpl", "mergeGroupChanges", new Object[]{getQualifiedName(), perOpChanges});
     boolean doChangesExist = false;
     for (final GroupChanges change : perOpChanges.values()) {
       if (change.exist()) {
@@ -237,13 +230,13 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
   }
 
   @Override
-  public void updateTopology () {
+  public void updateTopology() {
     LOG.entering("CommunicationGroupClientImpl", "updateTopology", getQualifiedName());
     for (final GroupCommOperator op : operators.values()) {
       final Class<? extends Name<String>> operName = op.getOperName();
       try {
         sender.send(Utils.bldVersionedGCM(groupName, operName, Type.UpdateTopology, taskId, op.getVersion(), driverId,
-                                          0, Utils.EmptyByteArr));
+            0, Utils.EmptyByteArr));
       } catch (final NetworkException e) {
         throw new RuntimeException("NetworkException while sending UpdateTopology", e);
       }
@@ -252,14 +245,14 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
       final Class<? extends Name<String>> operName = op.getOperName();
       GroupCommunicationMessage msg;
       do {
-         msg = commGroupNetworkHandler.waitForTopologyUpdate(operName);
-      }while(!isMsgVersionOk(msg));
+        msg = commGroupNetworkHandler.waitForTopologyUpdate(operName);
+      } while (!isMsgVersionOk(msg));
     }
     LOG.exiting("CommunicationGroupClientImpl", "updateTopology", getQualifiedName());
   }
 
-  private boolean isMsgVersionOk (final GroupCommunicationMessage msg) {
-    LOG.entering("CommunicationGroupClientImpl", "isMsgVersionOk", new Object[] { getQualifiedName(), msg });
+  private boolean isMsgVersionOk(final GroupCommunicationMessage msg) {
+    LOG.entering("CommunicationGroupClientImpl", "isMsgVersionOk", new Object[]{getQualifiedName(), msg});
     if (msg.hasVersion()) {
       final int msgVersion = msg.getVersion();
       final GroupCommOperator operator = operators.get(Utils.getClass(msg.getOperatorname()));
@@ -267,24 +260,24 @@ public class CommunicationGroupClientImpl implements CommunicationGroupServiceCl
       final boolean retVal;
       if (msgVersion < nodeVersion) {
         LOG.warning(getQualifiedName() + "Received a ver-" + msgVersion + " msg while expecting ver-" + nodeVersion
-                    + ". Discarding msg");
+            + ". Discarding msg");
         retVal = false;
       } else {
         retVal = true;
       }
-      LOG.exiting("CommunicationGroupClientImpl", "isMsgVersionOk", Arrays.toString(new Object[] { retVal, getQualifiedName(), msg }));
+      LOG.exiting("CommunicationGroupClientImpl", "isMsgVersionOk", Arrays.toString(new Object[]{retVal, getQualifiedName(), msg}));
       return retVal;
     } else {
       throw new RuntimeException(getQualifiedName() + "can only deal with versioned msgs");
     }
   }
 
-  private String getQualifiedName () {
+  private String getQualifiedName() {
     return Utils.simpleName(groupName) + " ";
   }
 
   @Override
-  public Class<? extends Name<String>> getName () {
+  public Class<? extends Name<String>> getName() {
     return groupName;
   }
 

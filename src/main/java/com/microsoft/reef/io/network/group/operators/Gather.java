@@ -3,19 +3,18 @@
  */
 package com.microsoft.reef.io.network.group.operators;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
 import com.microsoft.reef.io.network.group.impl.operators.basic.GatherOp;
-import com.microsoft.tang.annotations.DefaultImplementation;
-import com.microsoft.wake.Identifier;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.tang.annotations.DefaultImplementation;
+import org.apache.reef.wake.Identifier;
 
 import java.util.List;
 
 /**
  * MPI Gather Operator.
- *
+ * <p/>
  * This is an operator where the root is a receiver and there are multiple senders.
  * The root or receiver gathers all the elements sent by the senders in a List.
- *
  */
 public interface Gather {
 

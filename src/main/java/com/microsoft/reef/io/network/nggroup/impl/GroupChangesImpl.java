@@ -3,10 +3,10 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl;
 
+import com.microsoft.reef.io.network.nggroup.api.GroupChanges;
+
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
-
-import com.microsoft.reef.io.network.nggroup.api.GroupChanges;
 
 @Immutable
 @ThreadSafe
@@ -24,7 +24,7 @@ public class GroupChangesImpl implements GroupChanges {
   }
 
   @Override
-  public String toString () {
+  public String toString() {
     return "Changes: " + changes;
   }
 }

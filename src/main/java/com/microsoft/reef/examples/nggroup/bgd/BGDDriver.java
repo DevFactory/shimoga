@@ -3,6 +3,39 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd;
 
+import com.microsoft.reef.examples.nggroup.bgd.data.parser.Parser;
+import com.microsoft.reef.examples.nggroup.bgd.data.parser.SVMLightParser;
+import com.microsoft.reef.examples.nggroup.bgd.loss.LossFunction;
+import com.microsoft.reef.examples.nggroup.bgd.operatornames.*;
+import com.microsoft.reef.examples.nggroup.bgd.parameters.AllCommunicationGroup;
+import com.microsoft.reef.examples.nggroup.bgd.parameters.BGDControlParameters;
+import com.microsoft.reef.examples.nggroup.bgd.parameters.ModelDimensions;
+import com.microsoft.reef.examples.nggroup.bgd.parameters.ProbabilityOfFailure;
+import com.microsoft.reef.io.network.nggroup.api.driver.CommunicationGroupDriver;
+import com.microsoft.reef.io.network.nggroup.api.driver.GroupCommDriver;
+import com.microsoft.reef.io.network.nggroup.impl.config.BroadcastOperatorSpec;
+import com.microsoft.reef.io.network.nggroup.impl.config.ReduceOperatorSpec;
+import org.apache.reef.annotations.audience.DriverSide;
+import org.apache.reef.driver.context.ActiveContext;
+import org.apache.reef.driver.context.ServiceConfiguration;
+import org.apache.reef.driver.task.CompletedTask;
+import org.apache.reef.driver.task.FailedTask;
+import org.apache.reef.driver.task.RunningTask;
+import org.apache.reef.driver.task.TaskConfiguration;
+import org.apache.reef.evaluator.context.parameters.ContextIdentifier;
+import org.apache.reef.io.data.loading.api.DataLoadingService;
+import org.apache.reef.io.serialization.Codec;
+import org.apache.reef.io.serialization.SerializableCodec;
+import org.apache.reef.poison.PoisonedConfiguration;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.Configurations;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.annotations.Unit;
+import org.apache.reef.tang.exceptions.InjectionException;
+import org.apache.reef.tang.formats.ConfigurationSerializer;
+import org.apache.reef.wake.EventHandler;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,46 +44,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
-import com.microsoft.reef.annotations.audience.DriverSide;
-import com.microsoft.reef.driver.context.ActiveContext;
-import com.microsoft.reef.driver.context.ServiceConfiguration;
-import com.microsoft.reef.driver.task.CompletedTask;
-import com.microsoft.reef.driver.task.FailedTask;
-import com.microsoft.reef.driver.task.RunningTask;
-import com.microsoft.reef.driver.task.TaskConfiguration;
-import com.microsoft.reef.evaluator.context.parameters.ContextIdentifier;
-import com.microsoft.reef.examples.nggroup.bgd.data.parser.Parser;
-import com.microsoft.reef.examples.nggroup.bgd.data.parser.SVMLightParser;
-import com.microsoft.reef.examples.nggroup.bgd.loss.LossFunction;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.ControlMessageBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.DescentDirectionBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.LineSearchEvaluationsReducer;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.LossAndGradientReducer;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.MinEtaBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.ModelAndDescentDirectionBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.ModelBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.AllCommunicationGroup;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.BGDControlParameters;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.ModelDimensions;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.ProbabilityOfFailure;
-import com.microsoft.reef.io.data.loading.api.DataLoadingService;
-import com.microsoft.reef.io.network.nggroup.api.driver.CommunicationGroupDriver;
-import com.microsoft.reef.io.network.nggroup.api.driver.GroupCommDriver;
-import com.microsoft.reef.io.network.nggroup.impl.config.BroadcastOperatorSpec;
-import com.microsoft.reef.io.network.nggroup.impl.config.ReduceOperatorSpec;
-import com.microsoft.reef.io.serialization.Codec;
-import com.microsoft.reef.io.serialization.SerializableCodec;
-import com.microsoft.reef.poison.PoisonedConfiguration;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.Configurations;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.annotations.Unit;
-import com.microsoft.tang.exceptions.InjectionException;
-import com.microsoft.tang.formats.ConfigurationSerializer;
-import com.microsoft.wake.EventHandler;
 
 
 @DriverSide
@@ -84,7 +77,7 @@ public class BGDDriver {
     this.bgdControlParameters = bgdControlParameters;
 
     final int minNumOfPartitions =
-            bgdControlParameters.isRampup()
+        bgdControlParameters.isRampup()
             ? bgdControlParameters.getMinParts()
             : dataLoadingService.getNumberOfPartitions();
     final int numParticipants = minNumOfPartitions + 1;
@@ -142,12 +135,11 @@ public class BGDDriver {
     @Override
     public void onNext(final ActiveContext activeContext) {
       LOG.log(Level.INFO, "Got active context: {0}", activeContext.getId());
-      if(jobRunning(activeContext)) {
+      if (jobRunning(activeContext)) {
         if (!groupCommDriver.isConfigured(activeContext)) {
           // The Context is not configured with the group communications service let's do that.
           submitGroupCommunicationsService(activeContext);
-        }
-        else {
+        } else {
           // The group communications service is already active on this context. We can submit the task.
           submitTask(activeContext);
         }
@@ -166,7 +158,7 @@ public class BGDDriver {
         serviceConf = groupCommDriver.getServiceConfiguration();
       } else {
         final Configuration parsedDataServiceConf = ServiceConfiguration.CONF
-            .set(ServiceConfiguration.SERVICES,ExampleList.class)
+            .set(ServiceConfiguration.SERVICES, ExampleList.class)
             .build();
         serviceConf = Tang.Factory.getTang()
             .newConfigurationBuilder(groupCommDriver.getServiceConfiguration(), parsedDataServiceConf)
@@ -174,8 +166,8 @@ public class BGDDriver {
             .build();
       }
 
-      LOG.log(Level.FINEST, "Submit GCContext conf: {0} and Service conf: {1}", new Object[] {
-          confSerializer.toString(contextConf), confSerializer.toString(serviceConf) });
+      LOG.log(Level.FINEST, "Submit GCContext conf: {0} and Service conf: {1}", new Object[]{
+          confSerializer.toString(contextConf), confSerializer.toString(serviceConf)});
 
       activeContext.submitContextAndService(contextConf, serviceConf);
     }
@@ -193,7 +185,7 @@ public class BGDDriver {
       } else {
         partialTaskConfiguration = Configurations.merge(
             getSlaveTaskConfiguration(getSlaveId(activeContext)));
-            //, getTaskPoisonConfiguration());
+        //, getTaskPoisonConfiguration());
         LOG.info("Submitting SlaveTask conf");
       }
       communicationsGroup.addTask(partialTaskConfiguration);
@@ -274,8 +266,7 @@ public class BGDDriver {
           if (rTask != null) {
             LOG.log(Level.INFO, "Closing activecontext");
             rTask.getActiveContext().close();
-          }
-          else {
+          } else {
             LOG.log(Level.INFO, "Master must have closed my context");
           }
           return false;
@@ -320,17 +311,16 @@ public class BGDDriver {
   }
 
 
-
   /**
    * @return Configuration for the MasterTask
    */
   public Configuration getMasterTaskConfiguration() {
     return Configurations.merge(
-            TaskConfiguration.CONF
-              .set(TaskConfiguration.IDENTIFIER, MasterTask.TASK_ID)
-              .set(TaskConfiguration.TASK, MasterTask.class)
-              .build(),
-            bgdControlParameters.getConfiguration());
+        TaskConfiguration.CONF
+            .set(TaskConfiguration.IDENTIFIER, MasterTask.TASK_ID)
+            .set(TaskConfiguration.TASK, MasterTask.class)
+            .build(),
+        bgdControlParameters.getConfiguration());
   }
 
   /**
@@ -339,7 +329,7 @@ public class BGDDriver {
   private Configuration getSlaveTaskConfiguration(final String taskId) {
     final double pSuccess = bgdControlParameters.getProbOfSuccessfulIteration();
     final int numberOfPartitions = dataLoadingService.getNumberOfPartitions();
-    final double pFailure = 1 - Math.pow(pSuccess,1.0 / numberOfPartitions);
+    final double pFailure = 1 - Math.pow(pSuccess, 1.0 / numberOfPartitions);
     return Tang.Factory.getTang()
         .newConfigurationBuilder(
             TaskConfiguration.CONF

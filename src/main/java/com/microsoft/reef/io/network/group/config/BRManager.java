@@ -3,9 +3,6 @@
  */
 package com.microsoft.reef.io.network.group.config;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
-import com.microsoft.reef.io.network.Connection;
-import com.microsoft.reef.io.network.Message;
 import com.microsoft.reef.io.network.group.config.TaskTree.Status;
 import com.microsoft.reef.io.network.group.impl.GCMCodec;
 import com.microsoft.reef.io.network.group.impl.GroupCommNetworkHandler;
@@ -13,27 +10,30 @@ import com.microsoft.reef.io.network.group.impl.operators.faulty.BroadRedHandler
 import com.microsoft.reef.io.network.group.impl.operators.faulty.BroadReduceConfig;
 import com.microsoft.reef.io.network.group.impl.operators.faulty.ExceptionHandler;
 import com.microsoft.reef.io.network.group.operators.Reduce.ReduceFunction;
-import com.microsoft.reef.io.network.impl.MessagingTransportFactory;
-import com.microsoft.reef.io.network.impl.NetworkService;
-import com.microsoft.reef.io.network.impl.NetworkServiceParameters;
-import com.microsoft.reef.io.network.naming.NameServerParameters;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupMessageBody;
-import com.microsoft.reef.io.network.util.StringIdentifierFactory;
-import com.microsoft.reef.io.network.util.Utils;
-import com.microsoft.reef.io.serialization.SerializableCodec;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.JavaConfigurationBuilder;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.exceptions.BindException;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.EventHandler;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.impl.LoggingEventHandler;
-import com.microsoft.wake.impl.SingleThreadStage;
-import com.microsoft.wake.impl.ThreadPoolStage;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.Connection;
+import org.apache.reef.io.network.Message;
+import org.apache.reef.io.network.impl.MessagingTransportFactory;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.network.impl.NetworkServiceParameters;
+import org.apache.reef.io.network.naming.NameServerParameters;
+import org.apache.reef.io.network.util.StringIdentifierFactory;
+import org.apache.reef.io.network.util.Utils;
+import org.apache.reef.io.serialization.SerializableCodec;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.JavaConfigurationBuilder;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.exceptions.BindException;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.EventHandler;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.impl.LoggingEventHandler;
+import org.apache.reef.wake.impl.SingleThreadStage;
+import org.apache.reef.wake.impl.ThreadPoolStage;
+import org.apache.reef.wake.remote.Codec;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -105,29 +105,29 @@ public class BRManager {
         assert (srcAdds.getType() == Type.SourceAdd);
         final SingleThreadStage<GroupCommMessage> sendReqSrcAdd =
             new SingleThreadStage<>(new EventHandler<GroupCommMessage>() {
-          @Override
-          public void onNext(final GroupCommMessage srcAddsInner) {
-            final SerializableCodec<HashSet<Integer>> sc = new SerializableCodec<>();
-            for (final GroupMessageBody body : srcAddsInner.getMsgsList()) {
-              final Set<Integer> srcs = sc.decode(body.getData().toByteArray());
-              LOG.log(Level.FINEST, "Received req to send srcAdd for {0}", srcs);
-              for (final int src : srcs) {
-                final Identifier srcId = idFac.getNewInstance("ComputeGradientTask" + src);
-                BRManager.this.srcAdds.putIfAbsent(srcId, new LinkedBlockingQueue<GroupCommMessage>(1));
-                final BlockingQueue<GroupCommMessage> msgQue = BRManager.this.srcAdds.get(srcId);
-                try {
-                  LOG.log(Level.FINEST, "Waiting for srcAdd msg from: {0}", srcId);
-                  final GroupCommMessage srcAddMsg = msgQue.take();
-                  LOG.log(Level.FINEST, "Found a srcAdd msg from: {0}", srcId);
-                  BRManager.this.senderStage.onNext(srcAddMsg);
-                } catch (final InterruptedException e) {
-                  LOG.log(Level.WARNING, "Interrupted wait for: " + srcId, e);
-                  throw new RuntimeException(e);
+              @Override
+              public void onNext(final GroupCommMessage srcAddsInner) {
+                final SerializableCodec<HashSet<Integer>> sc = new SerializableCodec<>();
+                for (final GroupMessageBody body : srcAddsInner.getMsgsList()) {
+                  final Set<Integer> srcs = sc.decode(body.getData().toByteArray());
+                  LOG.log(Level.FINEST, "Received req to send srcAdd for {0}", srcs);
+                  for (final int src : srcs) {
+                    final Identifier srcId = idFac.getNewInstance("ComputeGradientTask" + src);
+                    BRManager.this.srcAdds.putIfAbsent(srcId, new LinkedBlockingQueue<GroupCommMessage>(1));
+                    final BlockingQueue<GroupCommMessage> msgQue = BRManager.this.srcAdds.get(srcId);
+                    try {
+                      LOG.log(Level.FINEST, "Waiting for srcAdd msg from: {0}", srcId);
+                      final GroupCommMessage srcAddMsg = msgQue.take();
+                      LOG.log(Level.FINEST, "Found a srcAdd msg from: {0}", srcId);
+                      BRManager.this.senderStage.onNext(srcAddMsg);
+                    } catch (final InterruptedException e) {
+                      LOG.log(Level.WARNING, "Interrupted wait for: " + srcId, e);
+                      throw new RuntimeException(e);
+                    }
+                  }
                 }
               }
-            }
-          }
-        }, 5);
+            }, 5);
         sendReqSrcAdd.onNext(srcAdds);
       }
     }, new LoggingEventHandler<Exception>());
@@ -149,7 +149,7 @@ public class BRManager {
         try {
           link.open();
           LOG.log(Level.FINEST, "Sending source ctrl msg {0} for {1} to {2}",
-              new Object[] { srcCtrlMsg.getType(), srcCtrlMsg.getSrcid(), id });
+              new Object[]{srcCtrlMsg.getType(), srcCtrlMsg.getSrcid(), id});
           link.write(srcCtrlMsg);
         } catch (final NetworkException e) {
           LOG.log(Level.WARNING, "Unable to send ctrl task msg to parent " + id, e);
@@ -295,7 +295,7 @@ public class BRManager {
     final List<ComparableIdentifier> schNeighs = this.tree.scheduledNeighbors(taskId);
     if (!schNeighs.isEmpty()) {
       for (final ComparableIdentifier neighbor : schNeighs) {
-        LOG.log(Level.FINEST, "Adding {0} as neighbor of {1}", new Object[] { taskId, neighbor });
+        LOG.log(Level.FINEST, "Adding {0} as neighbor of {1}", new Object[]{taskId, neighbor});
         sendSrcAddMsg(taskId, neighbor, reschedule);
       }
     } else {
@@ -310,8 +310,8 @@ public class BRManager {
         //Only for compute tasks
         LOG.log(Level.FINEST,
             "Parent {0} was alive while submitting.\n" +
-            "While scheduling found that parent is not scheduled.\n" +
-            "Sending Source Dead message.", parent);
+                "While scheduling found that parent is not scheduled.\n" +
+                "Sending Source Dead message.", parent);
         sendSrcDeadMsg(parent, taskId);
       }
     }

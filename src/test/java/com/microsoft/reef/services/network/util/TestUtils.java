@@ -7,7 +7,7 @@ import com.google.protobuf.ByteString;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupMessageBody;
-import com.microsoft.wake.Identifier;
+import org.apache.reef.wake.Identifier;
 
 public class TestUtils {
   public static GroupCommMessage bldGCM(final Type msgType, final Identifier from, final Identifier to, final byte[]... elements) {
@@ -29,7 +29,7 @@ public class TestUtils {
    * @return
    */
   public static boolean controlMessage(final GroupCommMessage.Type type) {
-    switch(type){
+    switch (type) {
     /*case SourceAdd:
     case SourceDead:
     case ParentAdd:
@@ -46,14 +46,14 @@ public class TestUtils {
     case UpdateTopology:
       return true;*/
 
-    case AllGather:
-    case AllReduce:
-    case Broadcast:
-    case Gather:
-    case Reduce:
-    case ReduceScatter:
-    case Scatter:
-      return false;
+      case AllGather:
+      case AllReduce:
+      case Broadcast:
+      case Gather:
+      case Reduce:
+      case ReduceScatter:
+      case Scatter:
+        return false;
 
       default:
         return true;

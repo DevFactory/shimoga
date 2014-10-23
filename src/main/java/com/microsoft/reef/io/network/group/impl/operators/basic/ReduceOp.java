@@ -3,19 +3,19 @@
  */
 package com.microsoft.reef.io.network.group.impl.operators.basic;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
 import com.microsoft.reef.io.network.group.impl.GroupCommNetworkHandler;
 import com.microsoft.reef.io.network.group.impl.operators.basic.config.GroupParameters;
 import com.microsoft.reef.io.network.group.operators.Gather;
 import com.microsoft.reef.io.network.group.operators.Reduce;
-import com.microsoft.reef.io.network.impl.NetworkService;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
-import com.microsoft.reef.io.network.util.Utils;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.IdentifierFactory;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.network.util.Utils;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.IdentifierFactory;
+import org.apache.reef.wake.remote.Codec;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -42,11 +42,11 @@ public final class ReduceOp implements Reduce {
         final @Parameter(GroupParameters.Reduce.ReduceFunction.class) ReduceFunction<T> redFunc) {
 
       this(new GatherOp.Sender<>(netService, multiHandler, codec, self, parent, children, idFac),
-           idFac.getNewInstance(self),
-           idFac.getNewInstance(parent),
-           children.equals(GroupParameters.defaultValue) ?
-               null : Utils.parseListCmp(children, idFac),
-           redFunc);
+          idFac.getNewInstance(self),
+          idFac.getNewInstance(parent),
+          children.equals(GroupParameters.defaultValue) ?
+              null : Utils.parseListCmp(children, idFac),
+          redFunc);
     }
 
     public Sender(final Gather.Sender<T> gatherSender, final Identifier self,
@@ -86,10 +86,10 @@ public final class ReduceOp implements Reduce {
         final @Parameter(GroupParameters.Reduce.ReduceFunction.class) ReduceFunction<T> redFunc) {
 
       this(new GatherOp.Receiver<>(netService, multiHandler, codec, self, parent, children, idFac),
-           idFac.getNewInstance(self),
-           parent.equals(GroupParameters.defaultValue) ? null : idFac.getNewInstance(parent),
-           Utils.parseListCmp(children, idFac),
-           redFunc);
+          idFac.getNewInstance(self),
+          parent.equals(GroupParameters.defaultValue) ? null : idFac.getNewInstance(parent),
+          Utils.parseListCmp(children, idFac),
+          redFunc);
     }
 
     public Receiver(final Gather.Receiver<T> gatherReceiver, final Identifier self,

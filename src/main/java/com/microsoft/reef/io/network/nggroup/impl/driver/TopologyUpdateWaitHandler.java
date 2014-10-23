@@ -3,16 +3,16 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.driver;
 
-import java.util.List;
-import java.util.logging.Logger;
-
 import com.microsoft.reef.io.network.nggroup.api.driver.TaskNode;
 import com.microsoft.reef.io.network.nggroup.impl.GroupCommunicationMessage;
 import com.microsoft.reef.io.network.nggroup.impl.utils.Utils;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.wake.EStage;
-import com.microsoft.wake.EventHandler;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.wake.EStage;
+import org.apache.reef.wake.EventHandler;
+
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
@@ -39,10 +39,10 @@ public class TopologyUpdateWaitHandler implements EventHandler<List<TaskNode>> {
    * wait for this. However other tasks that do not have any changes
    * will continue their regular operation
    */
-  public TopologyUpdateWaitHandler (final EStage<GroupCommunicationMessage> senderStage,
-                                    final Class<? extends Name<String>> groupName, final Class<? extends Name<String>> operName,
-                                    final String driverId, final int driverVersion, final String dstId, final int dstVersion,
-                                    final String qualifiedName) {
+  public TopologyUpdateWaitHandler(final EStage<GroupCommunicationMessage> senderStage,
+                                   final Class<? extends Name<String>> groupName, final Class<? extends Name<String>> operName,
+                                   final String driverId, final int driverVersion, final String dstId, final int dstVersion,
+                                   final String qualifiedName) {
     super();
     this.senderStage = senderStage;
     this.groupName = groupName;
@@ -55,15 +55,14 @@ public class TopologyUpdateWaitHandler implements EventHandler<List<TaskNode>> {
   }
 
 
-
   @Override
-  public void onNext (final List<TaskNode> nodes) {
-    LOG.entering("TopologyUpdateWaitHandler", "onNext", new Object[] { qualifiedName, nodes });
+  public void onNext(final List<TaskNode> nodes) {
+    LOG.entering("TopologyUpdateWaitHandler", "onNext", new Object[]{qualifiedName, nodes});
 
     for (final TaskNode node : nodes) {
       LOG.fine(qualifiedName + "Waiting for " + node + " to enter TopologyUdate phase");
       node.waitForTopologySetupOrFailure();
-      if(node.isRunning()) {
+      if (node.isRunning()) {
         LOG.fine(qualifiedName + node + " is in TopologyUpdate phase");
       } else {
         LOG.fine(qualifiedName + node + " has failed");
@@ -71,9 +70,9 @@ public class TopologyUpdateWaitHandler implements EventHandler<List<TaskNode>> {
     }
     LOG.finest(qualifiedName + "NodeTopologyUpdateWaitStage All to be updated nodes " + "have received TopologySetup");
     LOG.fine(qualifiedName + "All affected parts of the topology are in TopologyUpdate phase. Will send a note to ("
-             + dstId + "," + dstVersion + ")");
+        + dstId + "," + dstVersion + ")");
     senderStage.onNext(Utils.bldVersionedGCM(groupName, operName, Type.TopologyUpdated, driverId, driverVersion, dstId,
-                                             dstVersion, Utils.EmptyByteArr));
+        dstVersion, Utils.EmptyByteArr));
     LOG.exiting("TopologyUpdateWaitHandler", "onNext", qualifiedName);
   }
 

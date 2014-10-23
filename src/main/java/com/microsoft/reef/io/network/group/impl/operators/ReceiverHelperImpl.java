@@ -5,16 +5,16 @@ package com.microsoft.reef.io.network.group.impl.operators;
 
 import com.microsoft.reef.io.network.group.impl.GroupCommNetworkHandler;
 import com.microsoft.reef.io.network.group.impl.Handler;
-import com.microsoft.reef.io.network.impl.NetworkService;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupMessageBody;
-import com.microsoft.reef.io.network.util.ListCodec;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.tang.annotations.NamedParameter;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.network.util.ListCodec;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.tang.annotations.NamedParameter;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.remote.Codec;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

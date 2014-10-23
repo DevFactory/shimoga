@@ -3,7 +3,7 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd.math;
 
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.wake.remote.Codec;
 
 import javax.inject.Inject;
 import java.io.*;

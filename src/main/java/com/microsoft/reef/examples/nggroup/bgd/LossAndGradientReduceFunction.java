@@ -6,7 +6,7 @@ package com.microsoft.reef.examples.nggroup.bgd;
 import com.microsoft.reef.examples.nggroup.bgd.math.DenseVector;
 import com.microsoft.reef.examples.nggroup.bgd.math.Vector;
 import com.microsoft.reef.io.network.group.operators.Reduce.ReduceFunction;
-import com.microsoft.reef.io.network.util.Pair;
+import org.apache.reef.io.network.util.Pair;
 
 import javax.inject.Inject;
 
@@ -25,7 +25,7 @@ public class LossAndGradientReduceFunction
     int numEx = 0;
     Vector combinedGradient = null;
 
-    for (final Pair<Pair<Double,Integer>, Vector> lag : lags) {
+    for (final Pair<Pair<Double, Integer>, Vector> lag : lags) {
       if (combinedGradient == null) {
         combinedGradient = new DenseVector(lag.second);
       } else {

@@ -3,15 +3,15 @@
  */
 package com.microsoft.reef.io.network.nggroup.api.task;
 
-import java.util.Collection;
-import java.util.Set;
-
 import com.microsoft.reef.io.network.group.operators.Reduce.ReduceFunction;
 import com.microsoft.reef.io.network.nggroup.impl.GroupCommunicationMessage;
 import com.microsoft.reef.io.network.nggroup.impl.operators.Sender;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.reef.io.serialization.Codec;
-import com.microsoft.tang.annotations.Name;
+import org.apache.reef.io.serialization.Codec;
+import org.apache.reef.tang.annotations.Name;
+
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * The actual local topology maintaining the

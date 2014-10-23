@@ -3,24 +3,24 @@
  */
 package com.microsoft.reef.services.network.group;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
-import com.microsoft.reef.io.network.Message;
 import com.microsoft.reef.io.network.group.impl.GCMCodec;
 import com.microsoft.reef.io.network.group.impl.operators.SenderHelper;
 import com.microsoft.reef.io.network.group.impl.operators.SenderHelperImpl;
-import com.microsoft.reef.io.network.impl.MessagingTransportFactory;
-import com.microsoft.reef.io.network.impl.NetworkService;
-import com.microsoft.reef.io.network.naming.NameServer;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage.Type;
-import com.microsoft.reef.io.network.util.ListCodec;
-import com.microsoft.reef.io.network.util.StringCodec;
-import com.microsoft.reef.io.network.util.StringIdentifierFactory;
 import com.microsoft.reef.services.network.util.TestUtils;
-import com.microsoft.wake.ComparableIdentifier;
-import com.microsoft.wake.EventHandler;
-import com.microsoft.wake.Identifier;
-import com.microsoft.wake.remote.NetUtils;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.network.Message;
+import org.apache.reef.io.network.impl.MessagingTransportFactory;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.io.network.naming.NameServer;
+import org.apache.reef.io.network.util.ListCodec;
+import org.apache.reef.io.network.util.StringCodec;
+import org.apache.reef.io.network.util.StringIdentifierFactory;
+import org.apache.reef.wake.ComparableIdentifier;
+import org.apache.reef.wake.EventHandler;
+import org.apache.reef.wake.Identifier;
+import org.apache.reef.wake.remote.NetUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -79,7 +79,7 @@ public class SenderTest {
   }
 
   /**
-   * Test method for {@link com.microsoft.reef.io.network.group.impl.operators.SenderHelperImpl#SenderHelperImpl(com.microsoft.reef.io.network.impl.NetworkService, com.microsoft.wake.remote.Codec)}.
+   * Test method for {@link com.microsoft.reef.io.network.group.impl.operators.SenderHelperImpl#SenderHelperImpl(org.apache.reef.io.network.impl.NetworkService, com.microsoft.wake.remote.Codec)}.
    */
   @Test
   public final void testSenderHelperImpl() {

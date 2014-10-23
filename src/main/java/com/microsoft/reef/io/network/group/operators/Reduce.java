@@ -3,16 +3,16 @@
  */
 package com.microsoft.reef.io.network.group.operators;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
 import com.microsoft.reef.io.network.group.impl.operators.basic.ReduceOp;
-import com.microsoft.tang.annotations.DefaultImplementation;
-import com.microsoft.wake.Identifier;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.tang.annotations.DefaultImplementation;
+import org.apache.reef.wake.Identifier;
 
 import java.util.List;
 
 /**
  * MPI Reduce operator.
- *
+ * <p/>
  * This is another operator with root being receiver All senders send an element
  * to the receiver. These elements are passed through a reduce function and its
  * result is made available at the root

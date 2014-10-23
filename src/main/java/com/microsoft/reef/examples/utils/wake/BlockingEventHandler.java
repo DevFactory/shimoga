@@ -3,7 +3,7 @@
  */
 package com.microsoft.reef.examples.utils.wake;
 
-import com.microsoft.wake.EventHandler;
+import org.apache.reef.wake.EventHandler;
 
 import java.util.ArrayList;
 import java.util.List;

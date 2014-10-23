@@ -5,7 +5,7 @@ package com.microsoft.reef.io.network.group.impl;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
-import com.microsoft.wake.remote.Codec;
+import org.apache.reef.wake.remote.Codec;
 
 import javax.inject.Inject;
 

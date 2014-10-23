@@ -3,30 +3,29 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.task;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
-import com.microsoft.reef.driver.task.TaskConfigurationOptions;
-import com.microsoft.reef.io.network.impl.NetworkService;
 import com.microsoft.reef.io.network.nggroup.api.task.CommunicationGroupClient;
 import com.microsoft.reef.io.network.nggroup.api.task.CommunicationGroupServiceClient;
 import com.microsoft.reef.io.network.nggroup.api.task.GroupCommClient;
 import com.microsoft.reef.io.network.nggroup.api.task.GroupCommNetworkHandler;
 import com.microsoft.reef.io.network.nggroup.impl.config.parameters.SerializedGroupConfigs;
 import com.microsoft.reef.io.network.proto.ReefNetworkGroupCommProtos.GroupCommMessage;
-import com.microsoft.tang.Configuration;
-import com.microsoft.tang.Injector;
-import com.microsoft.tang.Tang;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.tang.annotations.Parameter;
-import com.microsoft.tang.exceptions.BindException;
-import com.microsoft.tang.exceptions.InjectionException;
-import com.microsoft.tang.formats.ConfigurationSerializer;
+import org.apache.reef.driver.task.TaskConfigurationOptions;
+import org.apache.reef.io.network.impl.NetworkService;
+import org.apache.reef.tang.Configuration;
+import org.apache.reef.tang.Injector;
+import org.apache.reef.tang.Tang;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.tang.exceptions.BindException;
+import org.apache.reef.tang.exceptions.InjectionException;
+import org.apache.reef.tang.formats.ConfigurationSerializer;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,11 +36,11 @@ public class GroupCommClientImpl implements GroupCommClient {
   private final Map<Class<? extends Name<String>>, CommunicationGroupServiceClient> communicationGroups;
 
   @Inject
-  public GroupCommClientImpl (@Parameter(SerializedGroupConfigs.class) final Set<String> groupConfigs,
-                              @Parameter(TaskConfigurationOptions.Identifier.class) final String taskId,
-                              final GroupCommNetworkHandler groupCommNetworkHandler,
-                              final NetworkService<GroupCommMessage> netService,
-                              final ConfigurationSerializer configSerializer) {
+  public GroupCommClientImpl(@Parameter(SerializedGroupConfigs.class) final Set<String> groupConfigs,
+                             @Parameter(TaskConfigurationOptions.Identifier.class) final String taskId,
+                             final GroupCommNetworkHandler groupCommNetworkHandler,
+                             final NetworkService<GroupCommMessage> netService,
+                             final ConfigurationSerializer configSerializer) {
     this.communicationGroups = new HashMap<>();
     LOG.finest("GroupCommHandler-" + groupCommNetworkHandler.toString());
     for (final String groupConfigStr : groupConfigs) {
@@ -67,7 +66,7 @@ public class GroupCommClientImpl implements GroupCommClient {
   }
 
   @Override
-  public CommunicationGroupClient getCommunicationGroup (final Class<? extends Name<String>> groupName) {
+  public CommunicationGroupClient getCommunicationGroup(final Class<? extends Name<String>> groupName) {
     return communicationGroups.get(groupName);
   }
 }

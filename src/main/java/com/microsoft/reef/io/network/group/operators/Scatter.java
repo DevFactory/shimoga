@@ -3,16 +3,16 @@
  */
 package com.microsoft.reef.io.network.group.operators;
 
-import com.microsoft.reef.exception.evaluator.NetworkException;
 import com.microsoft.reef.io.network.group.impl.operators.basic.ScatterOp;
-import com.microsoft.tang.annotations.DefaultImplementation;
-import com.microsoft.wake.Identifier;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.tang.annotations.DefaultImplementation;
+import org.apache.reef.wake.Identifier;
 
 import java.util.List;
 
 /**
  * MPI Scatter operator
- *
+ * <p/>
  * Scatter a list of elements to the receivers The receivers will receive a
  * sub-list of elements targeted for them. Supports non-uniform distribution
  * through the specification of counts
@@ -45,7 +45,7 @@ public interface Scatter {
      * Distributes as per counts across task ids sorted using order.
      */
     void send(List<T> elements, List<Integer> counts,
-        List<? extends Identifier> order) throws NetworkException, InterruptedException;
+              List<? extends Identifier> order) throws NetworkException, InterruptedException;
   }
 
   /**

@@ -3,38 +3,27 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd;
 
-import java.util.ArrayList;
-
-import javax.inject.Inject;
-
 import com.microsoft.reef.examples.nggroup.bgd.math.DenseVector;
 import com.microsoft.reef.examples.nggroup.bgd.math.Vector;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.ControlMessageBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.DescentDirectionBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.LineSearchEvaluationsReducer;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.LossAndGradientReducer;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.MinEtaBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.ModelAndDescentDirectionBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.operatornames.ModelBroadcaster;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.AllCommunicationGroup;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.EnableRampup;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.Iterations;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.Lambda;
-import com.microsoft.reef.examples.nggroup.bgd.parameters.ModelDimensions;
+import com.microsoft.reef.examples.nggroup.bgd.operatornames.*;
+import com.microsoft.reef.examples.nggroup.bgd.parameters.*;
 import com.microsoft.reef.examples.nggroup.bgd.utils.StepSizes;
 import com.microsoft.reef.examples.nggroup.bgd.utils.Timer;
-import com.microsoft.reef.exception.evaluator.NetworkException;
-import com.microsoft.reef.io.Tuple;
 import com.microsoft.reef.io.network.group.operators.Broadcast;
 import com.microsoft.reef.io.network.group.operators.Reduce;
 import com.microsoft.reef.io.network.nggroup.api.GroupChanges;
 import com.microsoft.reef.io.network.nggroup.api.task.CommunicationGroupClient;
 import com.microsoft.reef.io.network.nggroup.api.task.GroupCommClient;
-import com.microsoft.reef.io.network.util.Pair;
-import com.microsoft.reef.io.serialization.Codec;
-import com.microsoft.reef.io.serialization.SerializableCodec;
-import com.microsoft.reef.task.Task;
-import com.microsoft.tang.annotations.Parameter;
+import org.apache.reef.exception.evaluator.NetworkException;
+import org.apache.reef.io.Tuple;
+import org.apache.reef.io.network.util.Pair;
+import org.apache.reef.io.serialization.Codec;
+import org.apache.reef.io.serialization.SerializableCodec;
+import org.apache.reef.tang.annotations.Parameter;
+import org.apache.reef.task.Task;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
 
 /**
  *
@@ -89,8 +78,8 @@ public class MasterTask implements Task {
 
     double gradientNorm = Double.MAX_VALUE;
     for (int iteration = 1; !converged(iteration, gradientNorm); ++iteration) {
-      try(Timer t = new Timer("Current Iteration(" + (iteration) + ")")) {
-        final Pair<Double,Vector> lossAndGradient = computeLossAndGradient();
+      try (Timer t = new Timer("Current Iteration(" + (iteration) + ")")) {
+        final Pair<Double, Vector> lossAndGradient = computeLossAndGradient();
         losses.add(lossAndGradient.first);
         final Vector descentDirection = getDescentDirection(lossAndGradient.second);
 
@@ -109,7 +98,7 @@ public class MasterTask implements Task {
   }
 
   private void updateModel(final Vector descentDirection) throws NetworkException, InterruptedException {
-    try(Timer t = new Timer("GetDescentDirection + FindMinEta + UpdateModel")) {
+    try (Timer t = new Timer("GetDescentDirection + FindMinEta + UpdateModel")) {
       final Vector lineSearchEvals = lineSearch(descentDirection);
       minEta = findMinEta(model, descentDirection, lineSearchEvals);
       model.multAdd(minEta, descentDirection);
@@ -123,7 +112,7 @@ public class MasterTask implements Task {
     boolean allDead = false;
     do {
       try (Timer t = new Timer("LineSearch - Broadcast("
-              + (sendModel ? "ModelAndDescentDirection" : "DescentDirection") + ") + Reduce(LossEvalsInLineSearch)")) {
+          + (sendModel ? "ModelAndDescentDirection" : "DescentDirection") + ") + Reduce(LossEvalsInLineSearch)")) {
         if (sendModel) {
           System.out.println("DoLineSearchWithModel");
           controlMessageBroadcaster.send(ControlMessages.DoLineSearchWithModel);
@@ -134,7 +123,7 @@ public class MasterTask implements Task {
           descentDriectionBroadcaster.send(descentDirection);
         }
         final Pair<Vector, Integer> lineSearchEvals = lineSearchEvaluationsReducer.reduce();
-        if (lineSearchEvals!=null) {
+        if (lineSearchEvals != null) {
           final int numExamples = lineSearchEvals.second;
           System.out.println("#Examples: " + numExamples);
           lineSearchResults = lineSearchEvals.first;
@@ -156,11 +145,11 @@ public class MasterTask implements Task {
    * @throws InterruptedException
    * @throws NetworkException
    */
-  private Pair<Double,Vector> computeLossAndGradient() throws NetworkException, InterruptedException {
-    Pair<Double,Vector> returnValue = null;
+  private Pair<Double, Vector> computeLossAndGradient() throws NetworkException, InterruptedException {
+    Pair<Double, Vector> returnValue = null;
     boolean allDead = false;
     do {
-      try(Timer t = new Timer("Broadcast(" + (sendModel ? "Model" : "MinEta") + ") + Reduce(LossAndGradient)")) {
+      try (Timer t = new Timer("Broadcast(" + (sendModel ? "Model" : "MinEta") + ") + Reduce(LossAndGradient)")) {
         if (sendModel) {
           System.out.println("ComputeGradientWithModel");
           controlMessageBroadcaster.send(ControlMessages.ComputeGradientWithModel);
@@ -172,7 +161,7 @@ public class MasterTask implements Task {
         }
         final Pair<Pair<Double, Integer>, Vector> lossAndGradient = lossAndGradientReducer.reduce();
 
-        if (lossAndGradient!=null) {
+        if (lossAndGradient != null) {
           final int numExamples = lossAndGradient.first.second;
           System.out.println("#Examples: " + numExamples);
           final double lossPerExample = lossAndGradient.first.first / numExamples;

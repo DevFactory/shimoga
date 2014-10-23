@@ -3,12 +3,12 @@
  */
 package com.microsoft.reef.io.network.nggroup.impl.config.parameters;
 
-import com.microsoft.reef.io.serialization.Codec;
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.tang.annotations.NamedParameter;
+import org.apache.reef.io.serialization.Codec;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.tang.annotations.NamedParameter;
 
 @NamedParameter(doc = "Codec used to serialize and deserialize data in operators")
 public final class DataCodec implements Name<Codec> {
-  private DataCodec () {
+  private DataCodec() {
   }
 }

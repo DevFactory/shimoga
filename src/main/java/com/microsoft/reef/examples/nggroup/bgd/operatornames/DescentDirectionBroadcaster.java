@@ -3,8 +3,8 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd.operatornames;
 
-import com.microsoft.tang.annotations.Name;
-import com.microsoft.tang.annotations.NamedParameter;
+import org.apache.reef.tang.annotations.Name;
+import org.apache.reef.tang.annotations.NamedParameter;
 
 /**
  * Name of the broadcast operator used to send descent directions during linesearch.

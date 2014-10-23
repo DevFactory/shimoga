@@ -3,20 +3,18 @@
  */
 package com.microsoft.reef.examples.nggroup.bgd;
 
+import com.microsoft.reef.examples.nggroup.bgd.data.Example;
+import com.microsoft.reef.examples.nggroup.bgd.data.parser.Parser;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.reef.io.data.loading.api.DataSet;
+import org.apache.reef.io.network.util.Pair;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
-
-import com.microsoft.reef.examples.nggroup.bgd.data.Example;
-import com.microsoft.reef.examples.nggroup.bgd.data.parser.Parser;
-import com.microsoft.reef.io.data.loading.api.DataSet;
-import com.microsoft.reef.io.network.util.Pair;
 
 /**
  *
@@ -39,7 +37,7 @@ public class ExampleList {
    * @return the examples
    */
   public List<Example> getExamples() {
-    if(examples.isEmpty()) {
+    if (examples.isEmpty()) {
       loadData();
     }
     return examples;
