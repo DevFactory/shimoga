@@ -14,6 +14,7 @@ import org.apache.reef.io.network.Message;
 import org.apache.reef.io.network.impl.MessagingTransportFactory;
 import org.apache.reef.io.network.impl.NetworkService;
 import org.apache.reef.io.network.naming.NameServer;
+import org.apache.reef.io.network.naming.NameServerImpl;
 import org.apache.reef.io.network.util.ListCodec;
 import org.apache.reef.io.network.util.StringCodec;
 import org.apache.reef.io.network.util.StringIdentifierFactory;
@@ -40,7 +41,7 @@ public class SenderTest {
   private static final int numTasks = 5;
   private static final List<ComparableIdentifier> ids = new ArrayList<>(numTasks);
   private static final String nameServiceAddr = NetUtils.getLocalAddress();
-  private static final NameServer nameService = new NameServer(0, idFac);
+  private static final NameServer nameService = new NameServerImpl(0, idFac);
   private static final int nameServicePort = nameService.getPort();
   private static final List<Integer> nsPorts = new ArrayList<>(numTasks);
   private static final List<BlockingQueue<GroupCommMessage>> queues = new ArrayList<>(numTasks);
