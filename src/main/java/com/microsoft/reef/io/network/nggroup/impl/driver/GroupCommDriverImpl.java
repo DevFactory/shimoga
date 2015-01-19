@@ -22,6 +22,7 @@ import org.apache.reef.driver.task.RunningTask;
 import org.apache.reef.io.network.Message;
 import org.apache.reef.io.network.impl.*;
 import org.apache.reef.io.network.naming.NameServer;
+import org.apache.reef.io.network.naming.NameServerImpl;
 import org.apache.reef.io.network.naming.NameServerParameters;
 import org.apache.reef.io.network.util.StringIdentifierFactory;
 import org.apache.reef.tang.Configuration;
@@ -63,7 +64,7 @@ public class GroupCommDriverImpl implements GroupCommServiceDriver {
 
   private final IdentifierFactory idFac = new StringIdentifierFactory();
 
-  private final NameServer nameService = new NameServer(0, idFac);
+  private final NameServer nameService = new NameServerImpl(0, idFac);
 
   private final String nameServiceAddr;
   private final int nameServicePort;

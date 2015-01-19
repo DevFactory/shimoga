@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <reef.version>0.10-incubating-SNAPSHOT</reef.version>
+        <reef.version>0.10.0-incubating</reef.version>
         <hadoop.version>2.4.0</hadoop.version>
     </properties>
 

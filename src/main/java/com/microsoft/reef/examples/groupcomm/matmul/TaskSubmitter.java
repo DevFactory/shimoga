@@ -8,6 +8,7 @@ import org.apache.reef.driver.context.ActiveContext;
 import org.apache.reef.driver.task.TaskConfiguration;
 import org.apache.reef.io.network.impl.BindNSToTask;
 import org.apache.reef.io.network.naming.NameServer;
+import org.apache.reef.io.network.naming.NameServerImpl;
 import org.apache.reef.io.network.util.StringIdentifier;
 import org.apache.reef.io.network.util.StringIdentifierFactory;
 import org.apache.reef.tang.Configuration;
@@ -108,7 +109,7 @@ public class TaskSubmitter implements EventHandler<Iterable<ActiveContext>> {
     // Starting Name Service
     nameServiceAddr = NetUtils.getLocalAddress();
     this.nameServicePort = nameServicePort;
-    nameService = new NameServer(nameServicePort, factory);
+    nameService = new NameServerImpl(nameServicePort, factory);
   }
 
   /**
